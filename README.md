@@ -25,5 +25,7 @@
 2. Check mate animation 
 3. Sound
 
+<img src="Screens_6_11_23/Mate.PNG" alt="Alt Text" width="256" height="256"> <img src="Screens_6_11_23/Game.PNG" alt="Alt Text" width="256" height="256">
+
 
 

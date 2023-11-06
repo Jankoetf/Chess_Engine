@@ -5,7 +5,7 @@
 - implementing **alpha-beta-pruning** algorithm on game tree, for the purpose of finding best move for ai player on every move
 - implementing search on game tree in the purpose of funding **valid moves** for every move in the game
 
-## Main Game featres
+## Main Game features
 1. Two player game - classic
 2. Ai vs player
 

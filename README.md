@@ -9,6 +9,8 @@
 1. Two player game - classic
 2. Ai vs player
 
+![alt-text-1](image1.png "title-1") ![alt-text-2](image2.png "title-2")
+
 ## Main APP features
 1. Meni icons - when player clicks outside of game board, menu icons show up
 2. Menu - player can choose between normal game or player vs ai, and color agains ai

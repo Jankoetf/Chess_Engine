@@ -9,13 +9,16 @@
 1. Two player game - classic
 2. Ai vs player
 
-![alt-text-1](image1.png "title-1") ![alt-text-2](image2.png "title-2")
+<img src="Screens_6_11_23/Start.PNG" alt="Alt Text" width="256" height="256"> <img src="Screens_6_11_23/menuIcons.PNG" alt="Alt Text" width="256" height="256">
 
 ## Main APP features
 1. Meni icons - when player clicks outside of game board, menu icons show up
 2. Menu - player can choose between normal game or player vs ai, and color agains ai
 3. Changing menu background picture, showing controling squares in game
 4. Undoing a move on rigth click, reseting game
+
+<img src="Screens_6_11_23/ControlSquares.PNG" alt="Alt Text" width="256" height="256"><img src="Screens_6_11_23/Menu.PNG" alt="Alt Text" width="256" height="256"> 
+
 
 ## Future Features
 1. Ai vs Ai for comparison of different heuristics for evaluating position

@@ -123,8 +123,8 @@ def main():
                         #move.analyzeStupidMove()
                         if move in validMoves:
                             gs.MakeStupidMove(move, gs.board)
-                            #print(f"White king position is: {gs.WhiteKingPosition}")
-                            #print(f"Black king position is: {gs.BlackKingPosition}")
+                            print(f"White king position is: {gs.WhiteKingPosition}")
+                            print(f"Black king position is: {gs.BlackKingPosition}")
                             #print(gs.whiteToMove)
                             if ai_white:
                                 print(gs.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "w"))
@@ -224,8 +224,8 @@ def drawNotationRankFile(gs, board, showControl, c):
 
 
 def loadImages():
-    Pieces = ["bK", "bQ", "bN", "bR", "bP", "bB",
-              "wP", "wR","wN", "wB", "wK", "wQ"];          
+    Pieces = ["bK", "bQ", "bN", "bR", "bP", "bB", "bK_w", "bK_l",
+              "wP", "wR","wN", "wB", "wK", "wQ", "wK_w", "wK_l"];       
     for piece in Pieces:
         Images[piece] = p.transform.scale(
                 p.image.load("Images/" + piece + ".png"),
@@ -280,6 +280,12 @@ def drawPieces(gs, board1):
             if piece != "--":
                 board1.blit(Images[piece], p.Rect(file*Square_size,
                             rank*Square_size, Square_size, Square_size))
+    if gs.black_is_mated:
+        board1.blit(Images["wK_w"], p.Rect(gs.WhiteKingPosition[1]*Square_size, gs.WhiteKingPosition[0]*Square_size, Square_size, Square_size))
+        board1.blit(Images["bK_l"], p.Rect(gs.BlackKingPosition[1]*Square_size, gs.BlackKingPosition[0]*Square_size, Square_size, Square_size))
+    elif gs.white_is_mated:
+        board1.blit(Images["wK_l"], p.Rect(gs.WhiteKingPosition[1]*Square_size, gs.WhiteKingPosition[0]*Square_size, Square_size, Square_size))
+        board1.blit(Images["bK_w"], p.Rect(gs.BlackKingPosition[1]*Square_size, gs.BlackKingPosition[0]*Square_size, Square_size, Square_size))
 
 def draw_menu_icons(board, sound, turn = "b"):
     board.blit(Menu["menu1"], (0*Square_size, 4*Square_size))

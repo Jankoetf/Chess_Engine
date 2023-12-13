@@ -26,7 +26,7 @@ def main():
     background.fill(p.Color("black"))
     skeleton = p.Surface((Width_all, Height_all))
     skeleton.fill(p.Color("white"))
-    skeleton_icons = p.Surface((Width_all, Height_all))
+    skeleton_icons = p.Surface((Width_all, Height_all)) 
     skeleton_icons.fill(p.Color("white"))
     menu = p.Surface((Width_all, Height_all))
     
@@ -48,7 +48,6 @@ def main():
     #print(gs.board[0][5])
     
 
-    
     
     
     
@@ -350,14 +349,3 @@ def detectMouse_board_iterator(gs, location):
     
 if __name__ == "__main__":    
     main()
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    

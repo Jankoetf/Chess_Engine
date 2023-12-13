@@ -66,8 +66,7 @@ class GameState():
         
         self.whiteToMove = True
         
-        self.AnPassanPossibleNextMove = False
-        self.AnPassanSquare = ()
+        self.AnPassanPossibleNextMove = {}
         
         #king + castle
         self.BlackKingIsInCheck = False
@@ -105,7 +104,7 @@ class GameState():
         
         
         #AI
-        self.DEPTH = 3
+        self.DEPTH = 2
         
         
     def kings_position(self, board):
@@ -265,12 +264,9 @@ class GameState():
         #self.Check()
         #An passan      
         if move.startSquarePiece[1] == 'P' and move.endSquarePiece == "--" and abs(move.endCol - move.startCol) == 2:
-            self.AnPassanPossiblenextMove = True;
             self.AnPassanSquare = (move.endCol - (-1 if self.whiteToMove else 1), move.startRow)
-            #print(f"An passan square is {self.AnPassanSquare}")
-        else :
-            self.AnPassanPossiblenextMove = False
-            self.AnPassanSquare = ()
+            self.AnPassanPossibleNextMove[len(self.ListOfStupidMoves)+1] = self.AnPassanSquare
+            print(f"An passan square is {self.AnPassanPossibleNextMove}")
         
         color = move.startSquarePiece[0]
         op_c = 'b' if color == 'w' else 'w'
@@ -354,7 +350,11 @@ class GameState():
             #print(MoveToUndo)
             board[int(MoveToUndo[9])][int(MoveToUndo[12])] = MoveToUndo[14:16]
             board[int(MoveToUndo[3])][int(MoveToUndo[6])] = MoveToUndo[0:2]
-               
+            
+            #An passan rules
+            if len(self.ListOfStupidMoves)+1 in self.AnPassanPossibleNextMove:
+                self.AnPassanPossibleNextMove.pop(len(self.ListOfStupidMoves)+1)
+                print(f"An passan square is {self.AnPassanPossibleNextMove}")
             if MoveToUndo[16:] == "ENPassan":
                 op_color = "b" if MoveToUndo[0] == "w" else "w"
                 board[int(MoveToUndo[3])][int(MoveToUndo[12])] = op_color + "P"
@@ -434,10 +434,12 @@ class GameState():
                 valid_pawn_moves.append(Move((Col, Row), (Col -2*direction, Row), board))
 
              
-        if Row <= 6 and (board[Col-direction][Row + 1][0] == opponent_color or self.AnPassanSquare == (Col-direction,Row + 1)):
+        if Row <= 6 and (board[Col-direction][Row + 1][0] == opponent_color or (len(self.ListOfStupidMoves) in self.AnPassanPossibleNextMove and\
+                                                                                self.AnPassanPossibleNextMove[len(self.ListOfStupidMoves)] == (Col-direction,Row + 1))):
             valid_pawn_moves.append(Move((Col, Row), (Col-direction, Row+1), board))
             
-        if Row >= 1 and (board[Col-direction][Row - 1][0] == opponent_color or self.AnPassanSquare == (Col-direction,Row - 1)):        
+        if Row >= 1 and (board[Col-direction][Row - 1][0] == opponent_color or (len(self.ListOfStupidMoves) in self.AnPassanPossibleNextMove and\
+                                                                                self.AnPassanPossibleNextMove[len(self.ListOfStupidMoves)] == (Col-direction,Row - 1))):      
             valid_pawn_moves.append(Move((Col, Row), (Col-direction, Row-1), board))
             
                

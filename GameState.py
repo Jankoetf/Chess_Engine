@@ -266,7 +266,7 @@ class GameState():
         if move.startSquarePiece[1] == 'P' and move.endSquarePiece == "--" and abs(move.endCol - move.startCol) == 2:
             self.AnPassanSquare = (move.endCol - (-1 if self.whiteToMove else 1), move.startRow)
             self.AnPassanPossibleNextMove[len(self.ListOfStupidMoves)+1] = self.AnPassanSquare
-            print(f"An passan square is {self.AnPassanPossibleNextMove}")
+            #print(f"An passan square is {self.AnPassanPossibleNextMove}")
         
         color = move.startSquarePiece[0]
         op_c = 'b' if color == 'w' else 'w'
@@ -354,7 +354,7 @@ class GameState():
             #An passan rules
             if len(self.ListOfStupidMoves)+1 in self.AnPassanPossibleNextMove:
                 self.AnPassanPossibleNextMove.pop(len(self.ListOfStupidMoves)+1)
-                print(f"An passan square is {self.AnPassanPossibleNextMove}")
+                #print(f"An passan square is {self.AnPassanPossibleNextMove}")
             if MoveToUndo[16:] == "ENPassan":
                 op_color = "b" if MoveToUndo[0] == "w" else "w"
                 board[int(MoveToUndo[3])][int(MoveToUndo[12])] = op_color + "P"
@@ -409,6 +409,9 @@ class GameState():
                 #print("Short Black Rook Undo")
                 if self.BlackShortRookFirstMove == (len(self.ListOfStupidMoves) + 1):
                     self.BlackShortRookFirstMove = 0
+                    
+            if self.white_is_mated: self.white_is_mated = False
+            if self.black_is_mated: self.black_is_mated = False
             
             self.whiteToMove = not self.whiteToMove
             
@@ -579,7 +582,6 @@ class GameState():
                 
                 if (not self.whiteToMove) and board[Col][Row] == 'bK':
                     AllValidMoves.extend(self.get_all_king_moves('b', Col, Row, board))  
-                    
                 
         return AllValidMoves
     
@@ -610,8 +612,6 @@ class GameState():
         
     
     def evaluate_board(self, board):
-        
-        
         pieces_values = {'bP': -1.0, 'bB': -3.3, 'bN': -3.0, 'bR': -5.0, 'bQ': -9.0, 'bK':-1000,
                  'wP': 1.0, 'wB': 3.3, 'wN': 3.0, 'wR': 5.0, 'wQ': 9.0, "--": 0, 'wK': 1000}
         evaluation = 0
@@ -771,6 +771,12 @@ class GameState():
         
         #for m in moves:
             #print(m.startSquarePiece + str(m.startSq) + str(m.endSq) + m.endSquarePiece + move.get_Move_signature())
+        if len(moves) == 0 and not self.whiteToMove and self.BlackKingInCheck():
+                self.black_is_mated = True
+                print("mate")
+        if len(moves) == 0 and self.whiteToMove and self.WhiteKingInCheck():
+                self.white_is_mated = True
+                print("mate")
             
         return moves
                 

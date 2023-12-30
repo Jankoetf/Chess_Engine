@@ -27,4 +27,4 @@
  <img src="Screens_6_11_23/Mate.PNG" alt="Alt Text" width="256" height="256"><img src="Screens_6_11_23/matew.PNG" alt="Alt Text" width="256" height="256"> 
 
 ## **Thank you for exploring my project!** 
-If you'd like to learn more about my background and qualifications, please visit my [LinkedIn profile](https://www.linkedin.com/in/your-profile)
+If you'd like to learn more about my background and qualifications, please visit my [LinkedIn profile](https://www.linkedin.com/in/jankomitrovic)

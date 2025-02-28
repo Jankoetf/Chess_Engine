@@ -1,4 +1,5 @@
 from chess_engine.constants import *
+from chess_engine.move import Move
 import numpy as np
 
 class GameState():
@@ -98,8 +99,6 @@ class GameState():
         self.white_is_in_check = False
         self.white_is_mated = False
         self.stalmate = False
-        
-        
         
         #AI
         self.DEPTH = 2
@@ -649,13 +648,6 @@ class GameState():
             
         return evaluation
     
-    
-    def min_max_max(self, alpha, beta, depth):
-        pass
-    
-    def min_max_min(self, alpha, beta, depth):
-        pass
-    
     def min_max_alpha_beta(self, board, depth, isMaximizePlayer, alpha, beta, who_is_playing):
         m = 1 if who_is_playing == "w" else -1
         ai_moves_val = []
@@ -771,80 +763,7 @@ class GameState():
                 print("mate")
             
         return moves
-                
-        
-class Move():   
-    def __init__(self, startSq, endSq, board):
-        #Start end squares
-        self.startSq = startSq
-        self.endSq = endSq
-        self.startCol = startSq[0]
-        self.startRow = startSq[1]
-        self.endCol = endSq[0]
-        self.endRow = endSq[1]
-        self.startSquarePiece = board[self.startCol][self.startRow]
-        self.endSquarePiece = board[self.endCol][self.endRow]
-        
-        #Special options
-        self.move_is_en_passant = self.is_move_an_passant()
-        self.move_is_promotion = self.is_move_a_promotion()
-        self.move_is_castle = self.is_move_a_castle()
-        self.whos_turn = 1 if board[self.startCol][self.startRow][0] == 'w' else -1
-        
-
-    
-    
-    def is_move_an_passant(self):
-        return self.startSquarePiece[1] == 'P' and self.endSquarePiece == '--' and (self.startRow != self.endRow)
-        
-    def is_move_a_castle(self):
-        return self.startSquarePiece[1] == 'K' and self.endSquarePiece == '--' and\
-            abs(self.startRow - self.endRow) == 2 and abs(self.startCol - self.endCol) == 0 and (self.startCol in [0,7])
-    
-    def is_move_short_castle(self):
-        return self.is_move_a_castle() and self.endRow == 6
-    
-    def is_move_long_castle(self):
-        return self.is_move_a_castle() and self.endRow == 2
-    
-    def is_move_a_promotion(self):
-        return (self.endCol == 7 or self.endCol == 0) and self.startSquarePiece[1] == "P"
-    
-    def get_Move_signature(self):
-        Special_char = "Promotion" if self.move_is_promotion else "LCastle" if self.is_move_long_castle() \
-            else "SCastle" if self.is_move_short_castle() else "ENPassan" if self.move_is_en_passant else "Basic"
-        #return self.startSquarePiece + self.endSquarePiece + Special_char
-        return Special_char
-        
-        
-    def __eq__(self, other):
-        if isinstance(other, Move):
-            return self.startSq == other.startSq and self.endSq == other.endSq
-        
-    
-        
-    
-        
-class Square():
-    piece_values = {'bP': -1.0, 'bB': -3.3, 'bN': -3.0, 'bR': -5.0, 'bQ': -9.0,
-                     'wP': 1.0, 'wB': 3.3, 'wN': 3.0, 'wR': 5.0, 'wQ': 9.0}
-      
-    def __init__(self, Col, Row):
-        self.col = Col
-        self.row = Row
-        self.empty = True
-        self.piece = None
-        
-    def add_piece(self, piece):
-        self.piece = piece
-        
-    def square_value(self, piece):
-        #value = piece_values[piece]
-        #return value
-        pass
-
-    def is_square_empty(self):
-        return self.empty
+            
 
 
 

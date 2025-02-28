@@ -1,13 +1,12 @@
 import pygame as p
+import time
+
 import chess_engine.game_state as game_state
 from chess_engine.constants import *
-import time
 
 p.init()
 Images = {}
 Menu = {}
-
-
 
 def main():
     show_menu_icon, show_menu = False, False
@@ -21,14 +20,14 @@ def main():
     loadImages()
     menu_images()
     
-    screen = p.display.set_mode((Width_all, Height_all))
-    background = p.Surface((Width, Height))
+    screen = p.display.set_mode((WIDTH_TOTAL, HEIGHT_TOTAL))
+    background = p.Surface((WIDTH, HEIGHT))
     background.fill(p.Color("black"))
-    skeleton = p.Surface((Width_all, Height_all))
+    skeleton = p.Surface((WIDTH_TOTAL, HEIGHT_TOTAL))
     skeleton.fill(p.Color("white"))
-    skeleton_icons = p.Surface((Width_all, Height_all)) 
+    skeleton_icons = p.Surface((WIDTH_TOTAL, HEIGHT_TOTAL)) 
     skeleton_icons.fill(p.Color("white"))
-    menu = p.Surface((Width_all, Height_all))
+    menu = p.Surface((WIDTH_TOTAL, HEIGHT_TOTAL))
     
     clock = p.time.Clock()
 
@@ -162,7 +161,7 @@ def main():
                 
                 
         if not show_menu:
-            drawNotationRankFile(gs, background, show_control, table);
+            drawNotationRankFile(gs, background, show_control, table)
             #drawBoard(background)
             drawPieces(gs, background)           
             if show_menu_icon: 
@@ -170,13 +169,13 @@ def main():
                 screen.blit(skeleton_icons, (0,0))
             else:     
                 screen.blit(skeleton, (0,0))    
-            screen.blit(background,(Add_Width, Add_Height))
+            screen.blit(background,(ADDITIONAL_WIDTH, ADDITIONAL_HEIGHT))
         else:
             draw_menu(menu, bs)
             screen.blit(menu,(0, 0))
             
             
-        clock.tick(Max_fps)
+        clock.tick(MAX_FPS)
         p.display.flip()
     
     print(gs.mc)
@@ -187,11 +186,11 @@ def main():
   
 def drawBoard(board):
     colors = [p.Color("white"), p.Color("grey")]
-    for rank in range(Dim):
-        for file in range(Dim):
+    for rank in range(BASE_DIMENSION):
+        for file in range(BASE_DIMENSION):
             color = colors[((rank+file)%2)]
             p.draw.rect(board, color,
-            p.Rect(rank*Square_size, file*Square_size, Square_size, Square_size))
+            p.Rect(rank*SQUARE_SIZE, file*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
             
 
 def drawNotationRankFile(gs, board, showControl, c):
@@ -206,8 +205,8 @@ def drawNotationRankFile(gs, board, showControl, c):
         colors = [p.Color("white"), p.Color("green"), p.Color((120, 80, 40)), p.Color((80, 40, 120)),p.Color((120, 120, 20))]
         
     
-    for rank in range(Dim):
-        for file in range(Dim):
+    for rank in range(BASE_DIMENSION):
+        for file in range(BASE_DIMENSION):
             color = colors[((rank + file)%2)]
             p.draw.rect(board, color, p.Rect(file*64, rank*64, 64,64))
             if showControl:
@@ -219,7 +218,7 @@ def drawNotationRankFile(gs, board, showControl, c):
                     p.draw.rect(board, colors[4], p.Rect(file*64, rank*64, 64,64))
                 
             img = Font.render(gs.board_notation[rank][file], True, (0, 0, 0))
-            board.blit(img, (file*Square_size,rank*Square_size))
+            board.blit(img, (file*SQUARE_SIZE,rank*SQUARE_SIZE))
             
 
 
@@ -229,7 +228,7 @@ def loadImages():
     for piece in Pieces:
         Images[piece] = p.transform.scale(
                 p.image.load("Images/" + piece + ".png"),
-                (Square_size, Square_size))
+                (SQUARE_SIZE, SQUARE_SIZE))
         
 def menu_images():
     imgs = ["menu1", "sound2", "sound1", "Robots2"];          
@@ -237,72 +236,72 @@ def menu_images():
     for img in imgs:
         Menu[img] = p.transform.scale(
                 p.image.load("ImgsMenu/" + img + ".png"),
-                (Square_size, Square_size))
+                (SQUARE_SIZE, SQUARE_SIZE))
     backgrounds = ["background1", "background2", "background3"]
     for b in backgrounds:
         Menu[b] = p.transform.scale(
                 p.image.load("ImgsMenu/" + b + ".jpg"),
-                (Width_all, Height + Square_size))
+                (WIDTH_TOTAL, HEIGHT + SQUARE_SIZE))
     Menu["N2"] = p.transform.scale(
                 p.image.load("ImgsMenu/" + "N2" + ".jpg"),
-                (1*Square_size, 1*Square_size))
+                (1*SQUARE_SIZE, 1*SQUARE_SIZE))
     Menu["N3"] = p.transform.scale(
                  p.image.load("ImgsMenu/" + "N3" + ".jpg"),
-                (2*Square_size, 1*Square_size))
+                (2*SQUARE_SIZE, 1*SQUARE_SIZE))
     
     Menu["N1"] = p.transform.scale(
                 p.image.load("ImgsMenu/" + "N1" + ".jpeg"),
-                (2*Square_size, 1*Square_size))
+                (2*SQUARE_SIZE, 1*SQUARE_SIZE))
     Menu["Robots3"] = p.transform.scale(
                 p.image.load("ImgsMenu/" + "Robots3" + ".jpg"),
-                (Square_size, Square_size))
+                (SQUARE_SIZE, SQUARE_SIZE))
     Menu["whiteK2"] =  p.transform.scale(
                 p.image.load("ImgsMenu/" + "whiteK2" + ".jpg"),
-                (Square_size, Square_size))
+                (SQUARE_SIZE, SQUARE_SIZE))
     Menu["blackK2"] = p.transform.scale(
                 p.image.load("ImgsMenu/" + "blackK2" + ".png"),
-                (Square_size, Square_size))
+                (SQUARE_SIZE, SQUARE_SIZE))
     Menu["Robots"] = p.transform.scale(
                 p.image.load("ImgsMenu/" + "Robots" + ".jpg"),
-                (2*Square_size, Square_size))
+                (2*SQUARE_SIZE, SQUARE_SIZE))
     Menu["blackK"] = p.transform.scale(
                 p.image.load("ImgsMenu/" + "blackK" + ".jpg"),
-                (Square_size, Square_size))
+                (SQUARE_SIZE, SQUARE_SIZE))
     Menu["whiteK"] = p.transform.scale(
                 p.image.load("ImgsMenu/" + "whiteK" + ".jpg"),
-                (Square_size, Square_size))
+                (SQUARE_SIZE, SQUARE_SIZE))
     
     
 def drawPieces(gs, board1):
-    for rank in range(Dim):
-        for file in range(Dim):
+    for rank in range(BASE_DIMENSION):
+        for file in range(BASE_DIMENSION):
             piece = gs.board[rank][file];
             if piece != "--":
-                board1.blit(Images[piece], p.Rect(file*Square_size,
-                            rank*Square_size, Square_size, Square_size))
+                board1.blit(Images[piece], p.Rect(file*SQUARE_SIZE,
+                            rank*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
     if gs.black_is_mated:
-        board1.blit(Images["wK_w"], p.Rect(gs.WhiteKingPosition[1]*Square_size, gs.WhiteKingPosition[0]*Square_size, Square_size, Square_size))
-        board1.blit(Images["bK_l"], p.Rect(gs.BlackKingPosition[1]*Square_size, gs.BlackKingPosition[0]*Square_size, Square_size, Square_size))
+        board1.blit(Images["wK_w"], p.Rect(gs.WhiteKingPosition[1]*SQUARE_SIZE, gs.WhiteKingPosition[0]*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+        board1.blit(Images["bK_l"], p.Rect(gs.BlackKingPosition[1]*SQUARE_SIZE, gs.BlackKingPosition[0]*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
     elif gs.white_is_mated:
-        board1.blit(Images["wK_l"], p.Rect(gs.WhiteKingPosition[1]*Square_size, gs.WhiteKingPosition[0]*Square_size, Square_size, Square_size))
-        board1.blit(Images["bK_w"], p.Rect(gs.BlackKingPosition[1]*Square_size, gs.BlackKingPosition[0]*Square_size, Square_size, Square_size))
+        board1.blit(Images["wK_l"], p.Rect(gs.WhiteKingPosition[1]*SQUARE_SIZE, gs.WhiteKingPosition[0]*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+        board1.blit(Images["bK_w"], p.Rect(gs.BlackKingPosition[1]*SQUARE_SIZE, gs.BlackKingPosition[0]*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
 
 def draw_menu_icons(board, sound, turn = "b"):
-    board.blit(Menu["menu1"], (0*Square_size, 4*Square_size))
+    board.blit(Menu["menu1"], (0*SQUARE_SIZE, 4*SQUARE_SIZE))
     if sound:
-        board.blit(Menu["sound1"], (0*Square_size, 5*Square_size))
+        board.blit(Menu["sound1"], (0*SQUARE_SIZE, 5*SQUARE_SIZE))
     else:
-        board.blit(Menu["sound2"], (0*Square_size, 5*Square_size))
+        board.blit(Menu["sound2"], (0*SQUARE_SIZE, 5*SQUARE_SIZE))
     Font = p.font.SysFont(None, 38)
-    board.blit(Menu["Robots3"], (0*Square_size, 6*Square_size))
-    board.blit(Menu["N1"], (0*Square_size, 3*Square_size))
+    board.blit(Menu["Robots3"], (0*SQUARE_SIZE, 6*SQUARE_SIZE))
+    board.blit(Menu["N1"], (0*SQUARE_SIZE, 3*SQUARE_SIZE))
     if turn == "b":
-        board.blit(Menu["blackK"], (0*Square_size, 2*Square_size))
+        board.blit(Menu["blackK"], (0*SQUARE_SIZE, 2*SQUARE_SIZE))
     else:
-        board.blit(Menu["whiteK"], (0*Square_size, 2*Square_size))
-    board.blit(Menu["N2"], (0*Square_size, 7*Square_size))
+        board.blit(Menu["whiteK"], (0*SQUARE_SIZE, 2*SQUARE_SIZE))
+    board.blit(Menu["N2"], (0*SQUARE_SIZE, 7*SQUARE_SIZE))
     #img = Font.render("R", True, (0, 0, 0))
-    #board.blit(img, (Square_size*0 + 20, Square_size*6 + 10))
+    #board.blit(img, (SQUARE_SIZE*0 + 20, SQUARE_SIZE*6 + 10))
     
 def draw_menu(menu, back = 0, ai = False):
     Font = p.font.SysFont(None, 28)
@@ -313,21 +312,21 @@ def draw_menu(menu, back = 0, ai = False):
     else:
         menu.blit(Menu["background3"], (0,0))
     
-    menu.blit(Menu["N1"], (Square_size*4, Square_size*9))
+    menu.blit(Menu["N1"], (SQUARE_SIZE*4, SQUARE_SIZE*9))
     img = Font.render("Normal game", True, (0, 0, 0))
-    menu.blit(img, (Square_size*4, Square_size*9 + 40))
+    menu.blit(img, (SQUARE_SIZE*4, SQUARE_SIZE*9 + 40))
     
-    menu.blit(Menu["whiteK2"], (Square_size*3, Square_size*9))
+    menu.blit(Menu["whiteK2"], (SQUARE_SIZE*3, SQUARE_SIZE*9))
     img = Font.render("AI", True, (0, 0, 0))
-    menu.blit(img, (Square_size*3, Square_size*9 + 10))
+    menu.blit(img, (SQUARE_SIZE*3, SQUARE_SIZE*9 + 10))
     
-    menu.blit(Menu["blackK2"], (Square_size*6, Square_size*9))
+    menu.blit(Menu["blackK2"], (SQUARE_SIZE*6, SQUARE_SIZE*9))
     img = Font.render("AI", True, (0, 0, 0))
-    menu.blit(img, (Square_size*6, Square_size*9 + 10))
+    menu.blit(img, (SQUARE_SIZE*6, SQUARE_SIZE*9 + 10))
     
-    menu.blit(Menu["Robots"], (Square_size*7, Square_size*9))
-    menu.blit(Menu["menu1"], (Square_size*0, Square_size*9))
-    menu.blit(Menu["N3"], (Square_size*1, Square_size*9))
+    menu.blit(Menu["Robots"], (SQUARE_SIZE*7, SQUARE_SIZE*9))
+    menu.blit(Menu["menu1"], (SQUARE_SIZE*0, SQUARE_SIZE*9))
+    menu.blit(Menu["N3"], (SQUARE_SIZE*1, SQUARE_SIZE*9))
     
     
     

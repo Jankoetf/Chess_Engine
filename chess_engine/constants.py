@@ -1,11 +1,12 @@
-Width = 64*8;
-Height = 64*8;
-Add_Height = 64;
-Add_Width = 64;
-Width_all = Width + 2*Add_Width;
-Height_all = Height + 2*Add_Height
-Dim = 8;
-Add_Dim = 2;
-Square_size = 64;
-Max_fps = 15;
+WIDTH = 64*8
+HEIGHT = 64*8
+ADDITIONAL_HEIGHT = 64
+ADDITIONAL_WIDTH = 64
+WIDTH_TOTAL = WIDTH + 2*ADDITIONAL_WIDTH
+HEIGHT_TOTAL = HEIGHT + 2*ADDITIONAL_HEIGHT
+SQUARE_SIZE = 64
+MAX_FPS = 15
+
+BASE_DIMENSION = 8
+ADDITIONAL_DIMENSION = 2
 

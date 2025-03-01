@@ -2,8 +2,8 @@
 class UiState:
     def __init__(self):
         #app state
+        self.show_menu = False #if menu than not table!
         self.show_menu_icons = False
-        self.show_menu = False
         self.show_manual = False
         
         # game options
@@ -51,6 +51,10 @@ class UiState:
     def toggle_table(self):
         """Uključuje ili isključuje prikaz tabele."""
         self.show_table = not self.show_table
+
+    def switch_background(self):
+        self.board_style += 1
+        self.board_style %= self.n_styles
     
     def toggle_control(self):
         """Uključuje ili isključuje prikaz kontrola."""

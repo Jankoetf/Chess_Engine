@@ -5,6 +5,7 @@ from chess_engine.constants import *
 from ui.load_images import LoadImages
 from ui.ui_state import UiState
 from ui.button import Button
+from ui.view import ViewClass
 
 #initialize pygame
 p.init()
@@ -12,17 +13,22 @@ p.init()
 #load all images
 Images, Menu = LoadImages().get_all_images()
 
+#components
+ui_instance = UiState()
 
-def main():
-    ui_instance = UiState()
-    show_menu = False
-    meni_icons_button = Button(0, 1, 1, 1, "eeee", Menu["menu1"], ui_instance.toggle_menu_icons)
-    
-    bs, table_color = False, False
+#View
+view_instance = ViewClass(ui_instance)
+
+# meni_icons_button = Button(0, 1, 1, 1, "", Menu["menu1"], ui_instance.toggle_menu_icons)
+meni_button = Button(0, 4, 1, 1, "", Menu["menu2"], ui_instance.toggle_menu)
+meni_button_in_meni = Button(0, 9, 1, 1, "", Menu["menu2"], ui_instance.toggle_menu)
+background_style_button = Button(1, 9, 2, 1, "", Menu["N3"], ui_instance.switch_background)
+
+def main():    
+    table_color = False
     ai_black, ai_white, ai_ai = False, False, False
     sound = False
     show_control = False
-
 
     important_squares = [(1, -1), (2, -1), (3, -1), (4, -1), (5, -1), (6, -1)]
     
@@ -53,33 +59,40 @@ def main():
                 location = p.mouse.get_pos()
                 detectMouseprint(gs, location)#Checking square
                 help_square = detectMouse_board_iterator(gs, location)
-
-                meni_icons_button.handle_event(e)
                 
-                if help_square == (3, -1) and ui_instance.show_menu_icons and not show_menu:
-                    show_menu = True
+                if not ui_instance.show_menu:
+                    view_instance.buttons["meni_icons_button"].handle_event(e)
+
+                if ui_instance.show_menu_icons:
+                    meni_button.handle_event(e)
+                
+                if ui_instance.show_menu:
+                    background_style_button.handle_event(e)
+                    meni_button_in_meni.handle_event(e)
+                
+                if help_square == (3, -1) and ui_instance.show_menu_icons and not ui_instance.show_menu:
+
+                    ui_instance.show_menu = True
                     
-                if help_square == (4, -1) and ui_instance.show_menu_icons and not show_menu:
+                if help_square == (4, -1) and ui_instance.show_menu_icons and not ui_instance.show_menu:
                     sound = True if not sound else False
                    
-                if help_square == (2, -1) and ui_instance.show_menu_icons and not show_menu:
+                if help_square == (2, -1) and ui_instance.show_menu_icons and not ui_instance.show_menu:
                     table_color = True if not table_color else False
                 
-                if help_square == (5, -1) and ui_instance.show_menu_icons and not show_menu:
+                if help_square == (5, -1) and ui_instance.show_menu_icons and not ui_instance.show_menu:
                     show_control = True if not show_control else False
                     
-                if help_square == (6, -1) and ui_instance.show_menu_icons and not show_menu:
+                if help_square == (6, -1) and ui_instance.show_menu_icons and not ui_instance.show_menu:
                     for i in range(len(gs.ListOfStupidMoves)):
                         gs.undoStupidMove(gs.board)
                 
-                if (help_square in important_squares and ui_instance.show_menu_icons) and not show_menu:
+                if (help_square in important_squares and ui_instance.show_menu_icons) and not ui_instance.show_menu:
                     pass
                    
-                if show_menu: 
+                if ui_instance.show_menu: 
                     if help_square == (8, -1):
-                        show_menu = False
-                    elif help_square == (8, 0) or help_square == (8, 1):
-                        bs += 1; bs = bs%3;
+                        ui_instance.show_menu = False
                     elif help_square == (8, 2):
                         if len(gs.ListOfStupidMoves) == 0:
                             ai_black, ai_white, ai_ai = True, False, False
@@ -99,7 +112,7 @@ def main():
                 #     show_menu_icon = False if show_menu_icon else True
                     
                 if not ai_ai:
-                    if (SquareSelected != help_square) and not ((-1 in help_square) or (8 in help_square)) and not show_menu:
+                    if (SquareSelected != help_square) and not ((-1 in help_square) or (8 in help_square)) and not ui_instance.show_menu:
                         SquareSelected = help_square
                         SquaresList.append(SquareSelected)
                         print(help_square)
@@ -143,26 +156,24 @@ def main():
                 print(f"Black king position is: {gs.BlackKingPosition}")
                 
                 
-        if not show_menu:
-            drawNotationRankFile(gs, background, show_control, table_color)
-            drawPieces(gs, background)           
-            if ui_instance.show_menu_icons: 
-                draw_menu_icons(skeleton_icons, sound, "b" if not gs.whiteToMove else "w")
+        if not ui_instance.show_menu:
+            ViewClass.draw_notation_rank_file(gs, background, show_control, table_color)
+            ViewClass.draw_pieces(gs, background)           
+            if ui_instance.show_menu_icons:
+                ViewClass.draw_menu_icons(skeleton_icons, sound, "b" if not gs.whiteToMove else "w")
                 screen.blit(skeleton_icons, (0,0))
+                meni_button.draw(screen)
             else:     
                 screen.blit(skeleton, (0,0))    
             screen.blit(background,(ADDITIONAL_WIDTH, ADDITIONAL_HEIGHT))
 
-            meni_icons_button.draw(screen)
-        else:
-            draw_menu(menu, bs)
-            screen.blit(menu,(0, 0))
-            
-        
-        
-        
+            view_instance.buttons["meni_icons_button"].draw(screen)
 
-            
+        else:
+            ViewClass.draw_menu(menu, ui_instance.board_style)
+            screen.blit(menu,(0, 0))
+            meni_button_in_meni.draw(screen)
+            background_style_button.draw(screen)
             
         clock.tick(MAX_FPS)
         p.display.flip()
@@ -170,97 +181,6 @@ def main():
     print(gs.mc)
     print(gs.uc)
     p.quit()
-    
-
-def drawBoard(board):
-    colors = [p.Color("white"), p.Color("grey")]
-    for rank in range(BASE_DIMENSION):
-        for file in range(BASE_DIMENSION):
-            color = colors[((rank+file)%2)]
-            p.draw.rect(board, color,
-            p.Rect(rank*SQUARE_SIZE, file*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
-            
-
-def drawNotationRankFile(gs, board, showControl, c):
-    color = "b" if gs.whiteToMove else "w"
-    op_color = "w" if gs.whiteToMove else "b"
-    controled = gs.Control(color, gs.board)
-    controled2  = gs.Control(op_color, gs.board)
-    Font = p.font.SysFont(None, 24)
-    colors = [p.Color((224, 224, 224)), p.Color((128, 128, 128)), p.Color((120, 80, 40)), p.Color((80, 40, 120)),p.Color((120, 120, 20))]
-    if c:
-        colors = [p.Color("white"), p.Color("green"), p.Color((120, 80, 40)), p.Color((80, 40, 120)), p.Color((120, 120, 20))]
-        
-    
-    for rank in range(BASE_DIMENSION):
-        for file in range(BASE_DIMENSION):
-            color = colors[((rank + file)%2)]
-            p.draw.rect(board, color, p.Rect(file*64, rank*64, 64,64))
-            if showControl:
-                if (rank, file) in controled:
-                    p.draw.rect(board, colors[2], p.Rect(file*64, rank*64, 64,64))
-                elif (rank, file) in controled2:
-                    p.draw.rect(board, colors[3], p.Rect(file*64, rank*64, 64,64))
-                if (rank, file) in controled2 and (rank, file) in controled:
-                    p.draw.rect(board, colors[4], p.Rect(file*64, rank*64, 64,64))
-                
-            img = Font.render(gs.board_notation[rank][file], True, (0, 0, 0))
-            board.blit(img, (file*SQUARE_SIZE,rank*SQUARE_SIZE))
-                
-    
-def drawPieces(gs, board1):
-    for rank in range(BASE_DIMENSION):
-        for file in range(BASE_DIMENSION):
-            piece = gs.board[rank][file];
-            if piece != "--":
-                board1.blit(Images[piece], p.Rect(file*SQUARE_SIZE,
-                            rank*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
-    if gs.black_is_mated:
-        board1.blit(Images["wK_w"], p.Rect(gs.WhiteKingPosition[1]*SQUARE_SIZE, gs.WhiteKingPosition[0]*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
-        board1.blit(Images["bK_l"], p.Rect(gs.BlackKingPosition[1]*SQUARE_SIZE, gs.BlackKingPosition[0]*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
-    elif gs.white_is_mated:
-        board1.blit(Images["wK_l"], p.Rect(gs.WhiteKingPosition[1]*SQUARE_SIZE, gs.WhiteKingPosition[0]*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
-        board1.blit(Images["bK_w"], p.Rect(gs.BlackKingPosition[1]*SQUARE_SIZE, gs.BlackKingPosition[0]*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
-
-def draw_menu_icons(board, sound, turn = "b"):
-    board.blit(Menu["menu2"], (0*SQUARE_SIZE, 4*SQUARE_SIZE))
-    if sound:
-        board.blit(Menu["sound1"], (0*SQUARE_SIZE, 5*SQUARE_SIZE))
-    else:
-        board.blit(Menu["sound2"], (0*SQUARE_SIZE, 5*SQUARE_SIZE))
-    Font = p.font.SysFont(None, 38)
-    board.blit(Menu["Robots3"], (0*SQUARE_SIZE, 6*SQUARE_SIZE))
-    board.blit(Menu["N1"], (0*SQUARE_SIZE, 3*SQUARE_SIZE))
-    if turn == "b":
-        board.blit(Menu["blackK"], (0*SQUARE_SIZE, 2*SQUARE_SIZE))
-    else:
-        board.blit(Menu["whiteK"], (0*SQUARE_SIZE, 2*SQUARE_SIZE))
-    board.blit(Menu["N2"], (0*SQUARE_SIZE, 7*SQUARE_SIZE))
-    
-def draw_menu(menu, back = 0, ai = False):
-    Font = p.font.SysFont(None, 28)
-    if back == 0:
-        menu.blit(Menu["background1"], (0,0))
-    elif back == 1:
-        menu.blit(Menu["background2"], (0,0))
-    else:
-        menu.blit(Menu["background3"], (0,0))
-    
-    menu.blit(Menu["N1"], (SQUARE_SIZE*4, SQUARE_SIZE*9))
-    img = Font.render("Normal game", True, (0, 0, 0))
-    menu.blit(img, (SQUARE_SIZE*4, SQUARE_SIZE*9 + 40))
-    
-    menu.blit(Menu["whiteK2"], (SQUARE_SIZE*3, SQUARE_SIZE*9))
-    img = Font.render("AI", True, (0, 0, 0))
-    menu.blit(img, (SQUARE_SIZE*3, SQUARE_SIZE*9 + 10))
-    
-    menu.blit(Menu["blackK2"], (SQUARE_SIZE*6, SQUARE_SIZE*9))
-    img = Font.render("AI", True, (0, 0, 0))
-    menu.blit(img, (SQUARE_SIZE*6, SQUARE_SIZE*9 + 10))
-    
-    menu.blit(Menu["Robots"], (SQUARE_SIZE*7, SQUARE_SIZE*9))
-    menu.blit(Menu["menu2"], (SQUARE_SIZE*0, SQUARE_SIZE*9))
-    menu.blit(Menu["N3"], (SQUARE_SIZE*1, SQUARE_SIZE*9))
     
             
 def detectMouseprint(gs, location):

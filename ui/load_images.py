@@ -10,7 +10,7 @@ class LoadImages:
         self.menu_images_size_map = {
             "menu1":(1,1, ".png"), "menu2":(1,1, ".png"),"menu3":(1,1, ".png"), "sound2":(1,1, ".png"), "sound1":(1,1, ".png"), "Robots2":(1,1, ".png"),
             **{"background"+str(i):(BASE_DIMENSION + 2, BASE_DIMENSION + 1, ".jpg") for i in range(1, 4)},
-            "N2":(1,1, ".jpg"), "N1":(2,1, ".jpeg"), "N3":(2,1, ".jpg"), "Robots":(2,1, ".jpg"),
+            "N2":(1,1, ".jpg"), "N1":(2,1, ".jpeg"), "N3":(2,1, ".jpg"), "Robots":(2,1, ".jpg"), "color":(1,1, ".png"),
             "Robots3":(1,1, ".jpg"), "whiteK2":(1,1, ".jpg"), "blackK2":(1,1, ".png"), "blackK":(1,1, ".jpg"), "whiteK":(1,1, ".jpg")
         }
 
@@ -21,7 +21,6 @@ class LoadImages:
         self.load_menu_images()
 
     def get_all_images(self):
-        print(self.piece_images_map, len(self.piece_images_map))
         return self.piece_images_map, self.meni_images_map
     
     def load_piece_images(self):

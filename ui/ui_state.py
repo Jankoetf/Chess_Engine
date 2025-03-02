@@ -15,7 +15,6 @@ class UiState:
         # AI state
         self.ai_black = False
         self.ai_white = False
-        self.ai_ai = False
         self.ai_thinking = False
         
         # square selection
@@ -42,6 +41,7 @@ class UiState:
     
     def toggle_menu_icons(self):
         """Prikazuje ili sakriva ikone menija."""
+        print("heeeeeeeeeereeeeeeeeee")
         self.show_menu_icons = not self.show_menu_icons
     
     def toggle_sound(self):
@@ -55,6 +55,9 @@ class UiState:
     def switch_background(self):
         self.board_style += 1
         self.board_style %= self.n_styles
+    
+    def toggle_table_color(self):
+        self.table_color = not self.table_color
     
     def toggle_control(self):
         """Uključuje ili isključuje prikaz kontrola."""

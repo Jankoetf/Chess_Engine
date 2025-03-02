@@ -2,16 +2,11 @@ import pygame as p
 
 import chess_engine.game_state as game_state
 from chess_engine.constants import *
-from ui.load_images import LoadImages
 from ui.ui_state import UiState
-from ui.button import Button
 from ui.view import ViewClass
 
 #initialize pygame
 p.init()
-
-#load all images
-Images, Menu = LoadImages().get_all_images()
 
 #components
 ui_instance = UiState()
@@ -19,18 +14,8 @@ ui_instance = UiState()
 #View
 view_instance = ViewClass(ui_instance)
 
-# meni_icons_button = Button(0, 1, 1, 1, "", Menu["menu1"], ui_instance.toggle_menu_icons)
-meni_button = Button(0, 4, 1, 1, "", Menu["menu2"], ui_instance.toggle_menu)
-meni_button_in_meni = Button(0, 9, 1, 1, "", Menu["menu2"], ui_instance.toggle_menu)
-background_style_button = Button(1, 9, 2, 1, "", Menu["N3"], ui_instance.switch_background)
-
-def main():    
-    table_color = False
+def main():
     ai_black, ai_white, ai_ai = False, False, False
-    sound = False
-    show_control = False
-
-    important_squares = [(1, -1), (2, -1), (3, -1), (4, -1), (5, -1), (6, -1)]
     
     screen = p.display.set_mode((WIDTH_TOTAL, HEIGHT_TOTAL))
     background = p.Surface((WIDTH, HEIGHT))
@@ -57,38 +42,30 @@ def main():
                 running = False
             elif e.type == p.MOUSEBUTTONDOWN and e.button == 1:#Left == 1, Right ==3            
                 location = p.mouse.get_pos()
-                detectMouseprint(gs, location)#Checking square
-                help_square = detectMouse_board_iterator(gs, location)
-                
-                if not ui_instance.show_menu:
-                    view_instance.buttons["meni_icons_button"].handle_event(e)
+                print_detect_mouse(gs, location) #Checking square
+                help_square = detect_mouse_board_iterator(gs, location)
 
-                if ui_instance.show_menu_icons:
-                    meni_button.handle_event(e)
+                print("help_square: ", help_square)
+                view_instance.buttons["control_button"].is_clicked_new(help_square)
+
+                print("ui_instance.show_menu: ", ui_instance.show_menu)
+                if not ui_instance.show_menu:
+                    view_instance.buttons["meni_icons_button"].handle_event(help_square)
+                    print("ui_instance.show_menu_icons: ", ui_instance.show_menu_icons)
+
+                if ui_instance.show_menu_icons and not ui_instance.show_menu:
+                    view_instance.buttons["meni_button"].handle_event(help_square)
+                    view_instance.buttons["table_color_button"].handle_event(help_square)
+                    view_instance.buttons["sound_button"].handle_event(help_square)
+                    view_instance.buttons["control_button"].handle_event(help_square)
+
+                    if view_instance.buttons["reset_button"].is_clicked_new(help_square):
+                        for i in range(len(gs.ListOfStupidMoves)):
+                            gs.undoStupidMove(gs.board)
                 
                 if ui_instance.show_menu:
-                    background_style_button.handle_event(e)
-                    meni_button_in_meni.handle_event(e)
-                
-                if help_square == (3, -1) and ui_instance.show_menu_icons and not ui_instance.show_menu:
-
-                    ui_instance.show_menu = True
-                    
-                if help_square == (4, -1) and ui_instance.show_menu_icons and not ui_instance.show_menu:
-                    sound = True if not sound else False
-                   
-                if help_square == (2, -1) and ui_instance.show_menu_icons and not ui_instance.show_menu:
-                    table_color = True if not table_color else False
-                
-                if help_square == (5, -1) and ui_instance.show_menu_icons and not ui_instance.show_menu:
-                    show_control = True if not show_control else False
-                    
-                if help_square == (6, -1) and ui_instance.show_menu_icons and not ui_instance.show_menu:
-                    for i in range(len(gs.ListOfStupidMoves)):
-                        gs.undoStupidMove(gs.board)
-                
-                if (help_square in important_squares and ui_instance.show_menu_icons) and not ui_instance.show_menu:
-                    pass
+                    view_instance.buttons["background_style_button"].handle_event(help_square)
+                    view_instance.buttons["meni_button_in_meni"].handle_event(help_square)
                    
                 if ui_instance.show_menu: 
                     if help_square == (8, -1):
@@ -106,11 +83,7 @@ def main():
                     elif help_square == (8, 6) or help_square == (8,7):
                         if len(gs.ListOfStupidMoves) == 0:
                             ai_black, ai_white, ai_ai = False, False, True
-                        
-                        
-                # if ((-1 in help_square) or (8 in help_square)) and (not help_square in important_squares or not show_menu_icon): 
-                #     show_menu_icon = False if show_menu_icon else True
-                    
+                                            
                 if not ai_ai:
                     if (SquareSelected != help_square) and not ((-1 in help_square) or (8 in help_square)) and not ui_instance.show_menu:
                         SquareSelected = help_square
@@ -157,12 +130,17 @@ def main():
                 
                 
         if not ui_instance.show_menu:
-            ViewClass.draw_notation_rank_file(gs, background, show_control, table_color)
+            ViewClass.draw_notation_rank_file(gs, background, ui_instance.show_control, ui_instance.table_color)
             ViewClass.draw_pieces(gs, background)           
             if ui_instance.show_menu_icons:
-                ViewClass.draw_menu_icons(skeleton_icons, sound, "b" if not gs.whiteToMove else "w")
+                ViewClass.draw_menu_icons(skeleton_icons, ui_instance.sound, "b" if not gs.whiteToMove else "w")
                 screen.blit(skeleton_icons, (0,0))
-                meni_button.draw(screen)
+                view_instance.buttons["meni_button"].draw(screen)
+                view_instance.buttons["table_color_button"].draw(screen)
+                view_instance.buttons["sound_button"].draw(screen)
+                view_instance.buttons["control_button"].draw(screen)
+                view_instance.buttons["reset_button"].draw(screen)
+
             else:     
                 screen.blit(skeleton, (0,0))    
             screen.blit(background,(ADDITIONAL_WIDTH, ADDITIONAL_HEIGHT))
@@ -172,8 +150,8 @@ def main():
         else:
             ViewClass.draw_menu(menu, ui_instance.board_style)
             screen.blit(menu,(0, 0))
-            meni_button_in_meni.draw(screen)
-            background_style_button.draw(screen)
+            view_instance.buttons["meni_button_in_meni"].draw(screen)
+            view_instance.buttons["background_style_button"].draw(screen)
             
         clock.tick(MAX_FPS)
         p.display.flip()
@@ -183,21 +161,16 @@ def main():
     p.quit()
     
             
-def detectMouseprint(gs, location):
+def print_detect_mouse(gs, location):
     if location[1]//64 - 1 in range(8) and location[0]//64 - 1 in range(8):
         print(gs.board_notation[location[1]//64 - 1][location[0]//64 - 1])
 
-def detectMouse(gs, location):
+def detect_mouse(gs, location):
     return gs.board_notation[location[1]//64 - 1][location[0]//64 - 1]
-    
-def detectMouse_board_iterator_print(gs, location):
-    return print(f"{location[1]//64 - 1}, {location[0]//64 - 1}")
 
-def detectMouse_board_iterator(gs, location):
+def detect_mouse_board_iterator(gs, location):
     return (location[1]//64 - 1, location[0]//64 - 1)
-
-
-    
+ 
     
 if __name__ == "__main__":    
     main()

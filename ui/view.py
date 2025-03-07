@@ -4,21 +4,30 @@ import pygame as p
 from chess_engine.constants import *
 from ui.button import Button
 from ui.load_images import LoadImages
+from ui.manual_viewer import ManualViewer
 
 class ViewClass:
     Images, Menu = LoadImages().get_all_images()
 
     def __init__(self, ui_instance):
         self.buttons = {
-            "meni_icons_button":Button(0, 1, 1, 1, "", self.Menu["menu1"],None, ui_instance.toggle_menu_icons),
-            "meni_button": Button(0, 4, 1, 1, "", self.Menu["menu2"],None,  ui_instance.toggle_menu),
-            "meni_button_in_meni": Button(0, 9, 1, 1, "", self.Menu["menu2"],None,  ui_instance.toggle_menu),
-            "background_style_button": Button(1, 9, 2, 1, "", self.Menu["N3"],None,  ui_instance.switch_background),
-            "table_color_button": Button(0, 3, 1, 1, "", self.Menu["color"], None,  ui_instance.toggle_table_color),
-            "sound_button": Button(0, 5, 1, 1, "", self.Menu["sound2"], self.Menu["sound1"], ui_instance.toggle_sound),
-            "control_button": Button(0, 6, 1, 1, "", self.Menu["Robots3"], None, ui_instance.toggle_control),
-            "reset_button": Button(0, 7, 1, 1, "", self.Menu["N2"], None, None),
+            "meni_icons_button":Button(0, 1, 1, 1, self.Menu["menu1"],None, ui_instance.toggle_menu_icons),
+            "meni_button": Button(0, 4, 1, 1, self.Menu["menu2"],None,  ui_instance.toggle_menu),
+            "meni_button_in_meni": Button(0, 9, 1, 1, self.Menu["menu2"],None,  ui_instance.toggle_menu),
+            "meni_button_in_meni_2": Button(9, 9, 1, 1, self.Menu["menu2"],None,  ui_instance.toggle_menu),
+            "background_style_button": Button(1, 9, 2, 1, self.Menu["N3"],None,  ui_instance.switch_background),
+            "table_color_button": Button(0, 3, 1, 1, self.Menu["color"], None,  ui_instance.toggle_table_color),
+            "sound_button": Button(0, 5, 1, 1, self.Menu["sound2"], self.Menu["sound1"], ui_instance.toggle_sound),
+            "control_button": Button(0, 6, 1, 1, self.Menu["Robots3"], None, ui_instance.toggle_control),
+            "reset_button": Button(0, 7, 1, 1, self.Menu["N2"], None, None),
+            "ai_black_button": Button(3, 9, 1, 1, self.Menu["blackAI"], None, ui_instance.set_ai_black),
+            "human_vs_human_button": Button(4, 9, 2, 1, self.Menu["N1"], None, ui_instance.set_human_vs_human),
+            "ai_white_button": Button(6, 9, 1, 1, self.Menu["whiteAI"], None, ui_instance.set_ai_white),
+            "manual_button": Button(7, 9, 2, 1, self.Menu["manual"], None, ui_instance.toggle_manual),
         }
+
+        manual_path = "ImgsMenu\game_instructions.png"
+        self.manual = ManualViewer(manual_path, (WIDTH_TOTAL, HEIGHT))
 
     @staticmethod
     def draw_board(board):
@@ -60,7 +69,7 @@ class ViewClass:
     def draw_pieces(gs, board1):
         for rank in range(BASE_DIMENSION):
             for file in range(BASE_DIMENSION):
-                piece = gs.board[rank][file];
+                piece = gs.board[rank][file]
                 if piece != "--":
                     board1.blit(ViewClass.Images[piece], p.Rect(file*SQUARE_SIZE,
                                 rank*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
@@ -88,22 +97,11 @@ class ViewClass:
         #board.blit(ViewClass.Menu["N2"], (0*SQUARE_SIZE, 7*SQUARE_SIZE))
 
     @staticmethod
-    def draw_menu(menu, background = 0, ai = False):
+    def draw_menu(menu, view_instance, background, show_manual):
         Font = p.font.SysFont(None, 28)
-        menu.blit(ViewClass.Menu[f"background{background+1}"], (0,0))
-        
-        menu.blit(ViewClass.Menu["N1"], (SQUARE_SIZE*4, SQUARE_SIZE*9))
-        img = Font.render("Normal game", True, (0, 0, 0))
-        menu.blit(img, (SQUARE_SIZE*4, SQUARE_SIZE*9 + 40))
-        
-        menu.blit(ViewClass.Menu["whiteK2"], (SQUARE_SIZE*3, SQUARE_SIZE*9))
-        img = Font.render("AI", True, (0, 0, 0))
-        menu.blit(img, (SQUARE_SIZE*3, SQUARE_SIZE*9 + 10))
-        
-        menu.blit(ViewClass.Menu["blackK2"], (SQUARE_SIZE*6, SQUARE_SIZE*9))
-        img = Font.render("AI", True, (0, 0, 0))
-        menu.blit(img, (SQUARE_SIZE*6, SQUARE_SIZE*9 + 10))
-        
-        menu.blit(ViewClass.Menu["Robots"], (SQUARE_SIZE*7, SQUARE_SIZE*9))
-        #menu.blit(Menu["menu2"], (SQUARE_SIZE*0, SQUARE_SIZE*9))
-        #menu.blit(Menu["N3"], (SQUARE_SIZE*1, SQUARE_SIZE*9))
+
+        if show_manual:
+            view_instance.manual.draw(menu)
+        else:
+            menu.blit(ViewClass.Menu[f"background{background+1}"], (0,0))
+

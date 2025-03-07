@@ -11,7 +11,8 @@ class LoadImages:
             "menu1":(1,1, ".png"), "menu2":(1,1, ".png"),"menu3":(1,1, ".png"), "sound2":(1,1, ".png"), "sound1":(1,1, ".png"), "Robots2":(1,1, ".png"),
             **{"background"+str(i):(BASE_DIMENSION + 2, BASE_DIMENSION + 1, ".jpg") for i in range(1, 4)},
             "N2":(1,1, ".jpg"), "N1":(2,1, ".jpeg"), "N3":(2,1, ".jpg"), "Robots":(2,1, ".jpg"), "color":(1,1, ".png"),
-            "Robots3":(1,1, ".jpg"), "whiteK2":(1,1, ".jpg"), "blackK2":(1,1, ".png"), "blackK":(1,1, ".jpg"), "whiteK":(1,1, ".jpg")
+            "Robots3":(1,1, ".jpg"), "whiteAI":(1,1, ".png"), "blackAI":(1,1, ".png"), "blackK":(1,1, ".jpg"), "whiteK":(1,1, ".jpg"),
+            "manual":(2,1, ".png")
         }
 
         self.piece_images_map = {}

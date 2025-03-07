@@ -704,11 +704,6 @@ class GameState():
             return bestVal
             
     
-    def get_AI_move(self, alpha, beta, depth):
-        pass
-        
-        
-        
     def get_all_legit_moves(self, board):
         moves = self.getAllValidMoves(self.board)
         #controled_squares = self.Control("b") if self.whiteToMove else self.Control("w")

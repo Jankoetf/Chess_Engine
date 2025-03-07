@@ -15,6 +15,7 @@ class UiState:
         # AI state
         self.ai_black = False
         self.ai_white = False
+        self.human_vs_human = True
         self.ai_thinking = False
         
         # square selection
@@ -41,16 +42,33 @@ class UiState:
     
     def toggle_menu_icons(self):
         """Prikazuje ili sakriva ikone menija."""
-        print("heeeeeeeeeereeeeeeeeee")
         self.show_menu_icons = not self.show_menu_icons
+    
+    def toggle_manual(self):
+        self.show_manual = not self.show_manual
     
     def toggle_sound(self):
         """Uključuje ili isključuje zvuk."""
         self.sound = not self.sound
     
-    def toggle_table(self):
-        """Uključuje ili isključuje prikaz tabele."""
-        self.show_table = not self.show_table
+    # def toggle_table(self):
+    #     """Uključuje ili isključuje prikaz tabele."""
+    #     self.show_table = not self.show_table
+
+    def set_ai_white(self):
+        self.ai_white = True
+        self.ai_black = False
+        self.human_vs_human = False
+    
+    def set_ai_black(self):
+        self.ai_white = False
+        self.ai_black = True
+        self.human_vs_human = False
+
+    def set_human_vs_human(self):
+        self.ai_white = False
+        self.ai_black = False
+        self.human_vs_human = True
 
     def switch_background(self):
         self.board_style += 1
@@ -70,22 +88,6 @@ class UiState:
     def stop_ai_thinking(self):
         """Označava da je AI završio razmišljanje."""
         self.ai_thinking = False
-    
-    def set_game_mode(self, mode):
-        """Postavlja režim igre (čovek-čovek, čovek-AI, AI-čovek, AI-AI)."""
-        if mode == "human_human":
-            self.ai_black = False
-            self.ai_white = False
-            self.ai_ai = False
-        elif mode == "human_ai":
-            self.ai_black = True
-            self.ai_white = False
-            self.ai_ai = False
-        elif mode == "ai_human":
-            self.ai_black = False
-            self.ai_white = True
-            self.ai_ai = False
-        elif mode == "ai_ai":
-            self.ai_black = False
-            self.ai_white = False
-            self.ai_ai = True
+
+    def __str__(self):
+        return f"ai_white:  {self.ai_white}, ai_black: {self.ai_black}, human: {self.human_vs_human}"

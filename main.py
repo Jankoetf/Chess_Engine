@@ -14,9 +14,7 @@ ui_instance = UiState()
 #View
 view_instance = ViewClass(ui_instance)
 
-def main():
-    ai_black, ai_white, ai_ai = False, False, False
-    
+def main():    
     screen = p.display.set_mode((WIDTH_TOTAL, HEIGHT_TOTAL))
     background = p.Surface((WIDTH, HEIGHT))
     background.fill(p.Color("black"))
@@ -43,6 +41,7 @@ def main():
             elif e.type == p.MOUSEBUTTONDOWN and e.button == 1: #Left == 1, Right ==3             
                 location = p.mouse.get_pos()
                 print_detect_mouse(gs, location) #Checking square
+                # print(ui_instance)
                 help_square = detect_mouse_board_iterator(gs, location)
 
                 if not ui_instance.show_menu:
@@ -61,69 +60,78 @@ def main():
                 if ui_instance.show_menu:
                     view_instance.buttons["background_style_button"].handle_event(e)
                     view_instance.buttons["meni_button_in_meni"].handle_event(e)
-                   
-                if ui_instance.show_menu: 
-                    if help_square == (8, -1):
-                        ui_instance.show_menu = False
-                    elif help_square == (8, 2):
-                        if len(gs.ListOfStupidMoves) == 0:
-                            ai_black, ai_white, ai_ai = True, False, False
-                    elif help_square == (8, 3) or help_square == (8, 4):
-                        if len(gs.ListOfStupidMoves) == 0:
-                            ai_black, ai_white, ai_ai = False, False, False
-                    elif help_square == (8, 5):
-                        if len(gs.ListOfStupidMoves) == 0:
-                            ai_black, ai_white, ai_ai = False, True, False
-                            print(gs.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "w"))
-                    elif help_square == (8, 6) or help_square == (8,7):
-                        if len(gs.ListOfStupidMoves) == 0:
-                            ai_black, ai_white, ai_ai = False, False, True
-                                            
-                if not ai_ai:
-                    if (SquareSelected != help_square) and not ((-1 in help_square) or (8 in help_square)) and not ui_instance.show_menu:
-                        SquareSelected = help_square
-                        SquaresList.append(SquareSelected)
-                        print(help_square)
+                    view_instance.buttons["meni_button_in_meni_2"].handle_event(e)
+                    view_instance.buttons["manual_button"].handle_event(e)
+
+                    #ai state control
+                    if view_instance.buttons["ai_white_button"].is_clicked(e.pos) or \
+                        view_instance.buttons["human_vs_human_button"].is_clicked(e.pos) or view_instance.buttons["ai_black_button"].is_clicked(e.pos):
                         
-                    else:
-                        SquareSelected = ()
-                        SquaresList = []
+                        for i in range(len(gs.ListOfStupidMoves)): #restart a game, because game mode is set
+                            gs.undoStupidMove(gs.board)
+                        
+                        gs.BlackOrWhiteMove()
+                        #set state
+                        view_instance.buttons["ai_white_button"].handle_event(e)
+                        view_instance.buttons["human_vs_human_button"].handle_event(e)
+                        view_instance.buttons["ai_black_button"].handle_event(e)
+
+                        if view_instance.buttons["ai_white_button"].is_clicked(e.pos):
+                            print(gs.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "w"))
+
+                        ui_instance.show_menu = False #play game!
+                                            
+                
+                if (SquareSelected != help_square) and not ((-1 in help_square) or (8 in help_square)) and not ui_instance.show_menu:
+                    SquareSelected = help_square
+                    SquaresList.append(SquareSelected)
+                    print(help_square)
                     
-                    if len(SquaresList) == 2:
-                        move = game_state.Move(SquaresList[0], SquaresList[1], gs.board)
+                else:
+                    SquareSelected = ()
+                    SquaresList = []
+                
+                if len(SquaresList) == 2:
+                    move = game_state.Move(SquaresList[0], SquaresList[1], gs.board)
+                    validMoves = gs.get_all_legit_moves(gs.board)
+                    
+                    if move in validMoves:
+                        gs.MakeStupidMove(move, gs.board)
+                        print(f"White king position is: {gs.WhiteKingPosition}")
+                        print(f"Black king position is: {gs.BlackKingPosition}")
+                        
+                        if ui_instance.ai_white:
+                            print(gs.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "w"))
+                        elif ui_instance.ai_black:
+                            print(gs.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "b"))
+                        
+                        gs.Check()
                         validMoves = gs.get_all_legit_moves(gs.board)
                         
-                        if move in validMoves:
-                            gs.MakeStupidMove(move, gs.board)
-                            print(f"White king position is: {gs.WhiteKingPosition}")
-                            print(f"Black king position is: {gs.BlackKingPosition}")
-                            
-                            if ai_white:
-                                print(gs.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "w"))
-                            elif ai_black:
-                                print(gs.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "b"))
-                            
-                            gs.Check()
-                            validMoves = gs.get_all_legit_moves(gs.board)
-                            
-                            SquaresList = []
-                            SquareSelected = ()
-                            gs.BlackOrWhiteMove()
-                        else:   
-                            print("Move is invalid")
-                            SquaresList = []
-                            SquareSelected = ()
+                        SquaresList = []
+                        SquareSelected = ()
+                        gs.BlackOrWhiteMove()
+                    else:   
+                        print("Move is invalid")
+                        SquaresList = []
+                        SquareSelected = ()
             
             elif e.type == p.MOUSEBUTTONDOWN and e.button == 3:
-                SquareSelected = ()
-                SquaresList = []
-                gs.undoStupidMove(gs.board)
-                gs.BlackOrWhiteMove()
-                validMoves = gs.get_all_legit_moves(gs.board)
-                print(f"White king position is: {gs.WhiteKingPosition}")
-                print(f"Black king position is: {gs.BlackKingPosition}")
+                #undo move option is disabled in menu and when ai is playing
+                if not ui_instance.show_menu and ui_instance.human_vs_human: 
+                    SquareSelected = ()
+                    SquaresList = []
+                    gs.undoStupidMove(gs.board)
+                    gs.BlackOrWhiteMove()
+                    validMoves = gs.get_all_legit_moves(gs.board)
+                    print(f"White king position is: {gs.WhiteKingPosition}")
+                    print(f"Black king position is: {gs.BlackKingPosition}")
+            
+            elif ui_instance.show_manual:            
+                view_instance.manual.handle_event(e)
+
                 
-                
+        # display table and options 
         if not ui_instance.show_menu:
             ViewClass.draw_notation_rank_file(gs, background, ui_instance.show_control, ui_instance.table_color)
             ViewClass.draw_pieces(gs, background)           
@@ -143,10 +151,19 @@ def main():
             view_instance.buttons["meni_icons_button"].draw(screen)
 
         else:
-            ViewClass.draw_menu(menu, ui_instance.board_style)
+            view_instance.draw_menu(menu, view_instance, ui_instance.board_style, ui_instance.show_manual)
+
             screen.blit(menu,(0, 0))
             view_instance.buttons["meni_button_in_meni"].draw(screen)
+            view_instance.buttons["meni_button_in_meni_2"].draw(screen)
             view_instance.buttons["background_style_button"].draw(screen)
+
+            view_instance.buttons["ai_white_button"].draw(screen)
+            view_instance.buttons["ai_black_button"].draw(screen)
+            view_instance.buttons["human_vs_human_button"].draw(screen)
+            view_instance.buttons["manual_button"].draw(screen)
+
+                
             
         clock.tick(MAX_FPS)
         p.display.flip()

@@ -17,18 +17,14 @@ class Button:
         """Proverava da li je pozicija unutar dugmeta."""
         return self.rect.collidepoint(pos)
     
-    def is_clicked_new(self, pos):
-        """Proverava da li je ista kvadrat u pitanju"""
-        pos = self.get_position(pos)
-        return self.pos == pos
-    
-    def handle_event(self, pos):
+    def handle_event(self, event):
         """Obrađuje događaje koji se odnose na dugme."""
-        if self.is_clicked_new(pos) and self.action:
+        if self.is_clicked(event.pos) and self.action:
             self.action()
 
             if self.toggle_button:
                 self.image = self.second_image if self.image == self.first_image else self.first_image
+
             return True
             
         return False

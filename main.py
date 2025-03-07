@@ -40,32 +40,27 @@ def main():
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
-            elif e.type == p.MOUSEBUTTONDOWN and e.button == 1:#Left == 1, Right ==3            
+            elif e.type == p.MOUSEBUTTONDOWN and e.button == 1: #Left == 1, Right ==3             
                 location = p.mouse.get_pos()
                 print_detect_mouse(gs, location) #Checking square
                 help_square = detect_mouse_board_iterator(gs, location)
 
-                print("help_square: ", help_square)
-                view_instance.buttons["control_button"].is_clicked_new(help_square)
-
-                print("ui_instance.show_menu: ", ui_instance.show_menu)
                 if not ui_instance.show_menu:
-                    view_instance.buttons["meni_icons_button"].handle_event(help_square)
-                    print("ui_instance.show_menu_icons: ", ui_instance.show_menu_icons)
+                    view_instance.buttons["meni_icons_button"].handle_event(e)
 
                 if ui_instance.show_menu_icons and not ui_instance.show_menu:
-                    view_instance.buttons["meni_button"].handle_event(help_square)
-                    view_instance.buttons["table_color_button"].handle_event(help_square)
-                    view_instance.buttons["sound_button"].handle_event(help_square)
-                    view_instance.buttons["control_button"].handle_event(help_square)
+                    view_instance.buttons["meni_button"].handle_event(e)
+                    view_instance.buttons["table_color_button"].handle_event(e)
+                    view_instance.buttons["sound_button"].handle_event(e)
+                    view_instance.buttons["control_button"].handle_event(e)
 
-                    if view_instance.buttons["reset_button"].is_clicked_new(help_square):
+                    if view_instance.buttons["reset_button"].is_clicked(e.pos):
                         for i in range(len(gs.ListOfStupidMoves)):
                             gs.undoStupidMove(gs.board)
                 
                 if ui_instance.show_menu:
-                    view_instance.buttons["background_style_button"].handle_event(help_square)
-                    view_instance.buttons["meni_button_in_meni"].handle_event(help_square)
+                    view_instance.buttons["background_style_button"].handle_event(e)
+                    view_instance.buttons["meni_button_in_meni"].handle_event(e)
                    
                 if ui_instance.show_menu: 
                     if help_square == (8, -1):

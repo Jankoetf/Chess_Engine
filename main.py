@@ -2,8 +2,10 @@ import pygame as p
 
 import chess_engine.game_state as game_state
 from chess_engine.constants import *
+from chess_engine.ai_class import AiClass
 from ui.ui_state import UiState
 from ui.view import ViewClass
+
 
 #initialize pygame
 p.init()
@@ -27,6 +29,9 @@ def main():
     clock = p.time.Clock()
 
     gs = game_state.GameState()
+
+    #AI
+    ai_instance = AiClass(gs)
     
     gs.BlackOrWhiteMove()
     validMoves = gs.get_all_legit_moves()
@@ -58,7 +63,7 @@ def main():
                             gs.undoStupidMove(gs.board)
                         
                         if ui_instance.ai_white:
-                            print(gs.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "w"))
+                            print(ai_instance.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "w"))
                 
                 if ui_instance.show_menu:
                     view_instance.buttons["background_style_button"].handle_event(e)
@@ -80,7 +85,7 @@ def main():
                         view_instance.buttons["ai_black_button"].handle_event(e)
 
                         if view_instance.buttons["ai_white_button"].is_clicked(e.pos):
-                            print(gs.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "w"))
+                            print(ai_instance.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "w"))
 
                         ui_instance.show_menu = False #play game!
                                             
@@ -104,9 +109,9 @@ def main():
                         print(f"Black king position is: {gs.BlackKingPosition}")
                         
                         if ui_instance.ai_white:
-                            print(gs.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "w"))
+                            print(ai_instance.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "w"))
                         elif ui_instance.ai_black:
-                            print(gs.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "b"))
+                            print(ai_instance.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "b"))
                         
                         gs.Check()
                         validMoves = gs.get_all_legit_moves()

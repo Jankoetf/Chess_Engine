@@ -1,6 +1,5 @@
 from chess_engine.constants import *
 from chess_engine.move import Move
-import numpy as np
 
 class GameState():
     
@@ -21,16 +20,6 @@ class GameState():
                       ["wP",  "wP", "wP", "wP", "wP", "wP", "wP", "wP"],
                       ["wR",  "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]
         ]
-        
-        self.c_board = [[0.001, 0.002, 0.004, 0.008, 0.008, 0.004, 0.002, 0.001],
-                       [0.002, 0.004, 0.008, 0.016, 0.016, 0.008, 0.004, 0.002],
-                       [0.004, 0.008, 0.016, 0.032, 0.032, 0.016, 0.008, 0.004],     
-                       [0.008, 0.016, 0.032, 0.064, 0.064, 0.032, 0.016, 0.008],
-                       [0.008, 0.016, 0.032, 0.064, 0.064, 0.032, 0.016, 0.008],
-                       [0.004, 0.008, 0.016, 0.032, 0.032, 0.016, 0.008, 0.004],
-                       [0.002,  0.004, 0.008, 0.016, 0.016, 0.008, 0.004, 0.002],
-                       [0.001,  0.002, 0.004, 0.008, 0.008, 0.004, 0.002, 0.001]
-        ]          
         
         self.board_notation = [["a8",  "b8", "c8", "d8", "e8", "f8", "g8", "h8"],
                               ["a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7"],
@@ -571,80 +560,6 @@ class GameState():
             return self.WhiteKingInCheck()
         else:
             return self.BlackKingInCheck()
-        
-    
-    def evaluate_board(self, board):
-        pieces_values = {'bP': -1.0, 'bB': -3.3, 'bN': -3.0, 'bR': -5.0, 'bQ': -9.0, 'bK':-1000,
-                 'wP': 1.0, 'wB': 3.3, 'wN': 3.0, 'wR': 5.0, 'wQ': 9.0, "--": 0, 'wK': 1000}
-        evaluation = 0
-        for Col in range(8):
-            for Row in range(8):
-                evaluation += pieces_values[board[Col][Row]]
-                
-        control_temp = self.Control('b', self.board)
-        for con in control_temp:
-            evaluation -= self.c_board[con[0]][con[1]]
-            
-        control_temp = self.Control('w', self.board)
-        for con in control_temp:
-            evaluation += self.c_board[con[0]][con[1]]
-            
-        return evaluation
-    
-    def min_max_alpha_beta(self, board, depth, isMaximizePlayer, alpha, beta, who_is_playing):
-        m = 1 if who_is_playing == "w" else -1
-        ai_moves_val = []
-        
-        if depth == self.DEPTH:
-            return_value = m * self.evaluate_board(board)
-            #self.undoStupidMove(board)
-            #self.uc +=1
-            return return_value
-        
-        if isMaximizePlayer:
-            bestVal = -1000
-            moves = self.get_all_legit_moves()
-            # if depth == 0:
-            #     num_of_first_moves = len(moves)
-                
-            for move in moves:
-                self.MakeStupidMove(move, board)
-                self.mc +=1
-                value = self.min_max_alpha_beta(board, depth +1, False, alpha, beta, who_is_playing)
-                bestVal = max(bestVal, value)
-                alpha = max(alpha, bestVal)
-                self.undoStupidMove(board)
-                self.uc += 1
-                if depth == 0:
-                    ai_moves_val.append(bestVal)
-                if beta <= alpha:
-                    break
-                
-            if depth == 0:
-                if len(ai_moves_val) != 0:
-                    self.MakeStupidMove(moves[np.argmax(ai_moves_val)], board)
-                
-            return bestVal
-        
-        else:
-            bestVal = 1000
-            moves = self.get_all_legit_moves()
-            for move in moves:
-                self.MakeStupidMove(move, board)
-                self.mc +=1
-                value = self.min_max_alpha_beta(board, depth +1, True, alpha, beta, who_is_playing)
-                bestVal = min(bestVal, value)
-                alpha = min(alpha, bestVal)
-                self.undoStupidMove(board)
-                self.uc +=1
-                if depth == 0:
-                    ai_moves_val.append(bestVal)
-                if beta <= alpha:
-                    break
-            if depth == 0:
-                self.MakeStupidMove(moves[np.argmax(ai_moves_val)],board)                    
-                    
-            return bestVal
             
     
     def get_all_legit_moves(self):

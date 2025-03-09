@@ -3,6 +3,7 @@ import pygame as p
 
 from chess_engine.constants import *
 from ui.button import Button
+from ui.label import Label
 from ui.load_images import LoadImages
 from ui.manual_viewer import ManualViewer
 
@@ -28,6 +29,11 @@ class ViewClass:
 
         manual_path = "ImgsMenu\game_instructions.png"
         self.manual = ManualViewer(manual_path, (WIDTH_TOTAL, HEIGHT))
+
+        self.labels = {
+            "game_evaluation_label":Label(0, 9, ""),
+            "ai_label": Label(0, 9.5, "AI is thinking")
+        }
 
     @staticmethod
     def draw_board(board):
@@ -88,7 +94,7 @@ class ViewClass:
         #     board.blit(ViewClass.Menu["sound1"], (0*SQUARE_SIZE, 5*SQUARE_SIZE))
         # else:
         #     board.blit(ViewClass.Menu["sound2"], (0*SQUARE_SIZE, 5*SQUARE_SIZE))
-        Font = p.font.SysFont(None, 38)
+        
         board.blit(ViewClass.Menu["Robots3"], (0*SQUARE_SIZE, 6*SQUARE_SIZE))
         #board.blit(Menu["N1"], (0*SQUARE_SIZE, 3*SQUARE_SIZE))
         if turn == "b":

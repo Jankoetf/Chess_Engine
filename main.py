@@ -32,9 +32,6 @@ def main():
     # gs = GameState(start_board = deepcopy(GameState.board_test_2)) #testing
     gs = GameState() #standard game...
 
-
-
-
     #AI class initialization
     ai_instance = AiClass(gs)
     
@@ -116,6 +113,7 @@ def main():
                     
                     if move in validMoves:
                         gs.MakeStupidMove(move, gs.board)
+                        ui_instance.game_evaluation = ai_instance.evaluate_board()
                         print(f"White king position is: {gs.WhiteKingPosition}")
                         print(f"Black king position is: {gs.BlackKingPosition}")
 
@@ -125,7 +123,7 @@ def main():
                             ui_instance.toggle_ai_thinking() #AI is not thinking
                             ui_instance.temp_board = deepcopy(gs.board)
                             ai_instance.make_best_move_threaded(gs.whiteToMove, ui_instance.toggle_ai_thinking)
-                            
+
                             validMoves = gs.get_all_legit_moves()
                             # for i in range(len(validMoves)):
                             #     print(validMoves[i])
@@ -178,6 +176,14 @@ def main():
 
             view_instance.buttons["meni_icons_button"].draw(screen)
 
+            #main label
+            if ui_instance.sound:
+                if ui_instance.ai_thinking:
+                    view_instance.labels["ai_label"].draw(screen)
+
+                view_instance.labels["game_evaluation_label"].set_text(f"Position Evaluation: {ui_instance.game_evaluation:.4f}")
+                view_instance.labels["game_evaluation_label"].draw(screen)
+
         else:
             view_instance.draw_menu(menu, view_instance, ui_instance.board_style, ui_instance.show_manual)
 
@@ -191,8 +197,10 @@ def main():
             view_instance.buttons["human_vs_human_button"].draw(screen)
             view_instance.buttons["manual_button"].draw(screen)
 
+        if not ui_instance.ai_thinking:
+            ui_instance.game_evaluation = ai_instance.evaluate_board()
+
         clock.tick(MAX_FPS)
-        print(ui_instance.ai_thinking)
         p.display.flip()
 
     p.quit()

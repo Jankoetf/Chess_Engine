@@ -6,6 +6,7 @@ class UiState:
         self.show_menu_icons = False
         self.show_manual = False
         self.temp_board = None
+        self.game_evaluation = 0
         
         # game options
         self.board_style, self.n_styles = 0, 3
@@ -51,10 +52,6 @@ class UiState:
     def toggle_sound(self):
         """Uključuje ili isključuje zvuk."""
         self.sound = not self.sound
-    
-    # def toggle_table(self):
-    #     """Uključuje ili isključuje prikaz tabele."""
-    #     self.show_table = not self.show_table
 
     def set_ai_white(self):
         self.ai_white = True

@@ -11,6 +11,17 @@ class ViewClass:
     Images, Menu = LoadImages().get_all_images()
 
     def __init__(self, ui_instance):
+        """
+        Initializes the ViewClass with UI elements, buttons, manual viewer, and labels.
+
+        Args:
+            ui_instance: An instance providing callback methods to update the UI state.
+        
+        The constructor creates a collection of buttons with their corresponding positions, images, and callback functions.
+        It also initializes a ManualViewer for displaying game instructions and sets up labels for game evaluation,
+        AI status, and game mode.
+        """
+
         self.buttons = {
             "meni_icons_button":Button(0, 1, 1, 1, self.Menu["menu1"],None, ui_instance.toggle_menu_icons),
             "meni_button": Button(0, 4, 1, 1, self.Menu["menu2"],None,  ui_instance.toggle_menu),
@@ -90,13 +101,7 @@ class ViewClass:
     
     @staticmethod
     def draw_menu_icons(board, sound, turn = "b"):
-        #board.blit(Menu["menu2"], (0*SQUARE_SIZE, 4*SQUARE_SIZE))
-        # if sound:
-        #     board.blit(ViewClass.Menu["sound1"], (0*SQUARE_SIZE, 5*SQUARE_SIZE))
-        # else:
-        #     board.blit(ViewClass.Menu["sound2"], (0*SQUARE_SIZE, 5*SQUARE_SIZE))
-        
-        board.blit(ViewClass.Menu["Robots3"], (0*SQUARE_SIZE, 6*SQUARE_SIZE))
+        # board.blit(ViewClass.Menu["Robots3"], (0*SQUARE_SIZE, 6*SQUARE_SIZE))
         #board.blit(Menu["N1"], (0*SQUARE_SIZE, 3*SQUARE_SIZE))
         if turn == "b":
             board.blit(ViewClass.Menu["blackK"], (0*SQUARE_SIZE, 2*SQUARE_SIZE))
@@ -106,7 +111,7 @@ class ViewClass:
 
     @staticmethod
     def draw_menu(menu, view_instance, background, show_manual):
-        Font = p.font.SysFont(None, 28)
+        #Font = p.font.SysFont(None, 28)
 
         if show_manual:
             view_instance.manual.draw(menu)

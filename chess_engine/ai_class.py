@@ -5,12 +5,19 @@ from chess_engine.constants import *
 
 class AiClass:
     def __init__(self, game_state_instance):
-        self.pieces_values = {
+        """
+        Responsible for AI moves, uses alpha-beta prunning algorithm for finding best move
+
+        Args:
+            game_state_instance (GameState): reference to GameState
+        """
+
+        self.pieces_values = { #standard piece evaluation, Bishop is usualy considered stronger than Knight
             'bP': -1.0, 'bB': -3.3, 'bN': -3.0, 'bR': -5.0, 'bQ': -9.0, 'bK':-1000,
             'wP': 1.0, 'wB': 3.3, 'wN': 3.0, 'wR': 5.0, 'wQ': 9.0, "--": 0, 'wK': 1000
         }
 
-        #control squares -> center is most important
+        #control squares -> center is most important -> so it will give more points to heuristic
         self.c_board = [
             [0.001, 0.002, 0.004, 0.008, 0.008, 0.004, 0.002, 0.001],
             [0.002, 0.004, 0.008, 0.016, 0.016, 0.008, 0.004, 0.002],
@@ -22,10 +29,19 @@ class AiClass:
             [0.001,  0.002, 0.004, 0.008, 0.008, 0.004, 0.002, 0.001]
         ]
 
-        self.game_state_instance = game_state_instance
-        self.thinking_thread = None
+        self.game_state_instance = game_state_instance #reference to game state instance
+        self.thinking_thread = None #thread is instance atribut, more options
 
     def evaluate_board(self):
+        """
+        this is always from white players's perspective, used heuristic consists of:
+        - piece evaluation
+        - center control
+        - checking oponent 
+
+        Returns:
+            evaluation (float) : evaluation for the whole board, from white's perspective
+        """
         evaluation = 0
 
         #classical piece evaluation, each piece is valuable
@@ -52,6 +68,26 @@ class AiClass:
         return evaluation
 
     def min_max_alpha_beta(self, board, depth, isMaximizePlayer, alpha, beta, who_is_playing):
+        """
+        Implements the minimax algorithm enhanced with alpha-beta pruning, used when AI is playing.
+        This function will also automaticaly play the best found move
+
+        This function uses the classical minimax approach to determine the optimal move, but with a crucial
+        optimization: alpha-beta pruning. Instead of exploring every branch of the game tree, alpha-beta
+        pruning eliminates paths that cannot possibly influence the final decision.
+
+        Parameters:
+            board: The current state of the game board.
+            depth (int): The maximum depth to search in the game tree. When depth reaches zero or a terminal
+                        state is encountered, the board is evaluated
+            isMaximizePlayer (bool): True if the current move is for the maximizing player; False for the minimizing player
+            alpha: The best value that the maximizing player is assured of so far
+            beta: The best value that the minimizing player is assured of so far
+            who_is_playing: white or black, w or b
+
+        Returns:
+            The evaluated score of the board state after applying the minimax algorithm with alpha-beta pruning.
+        """
         m = 1 if who_is_playing == "w" else -1
         ai_moves_val = []
         
@@ -100,7 +136,26 @@ class AiClass:
             
             return bestVal
         
-    def make_best_move_threaded(self, white_is_playing, callback):    
+    def make_best_move_threaded(self, white_is_playing, callback):
+        """
+        Starts a separate thread to compute the AI move using the minimax algorithm with alpha-beta pruning,
+        ensuring that the GUI remains responsive during the calculation.
+
+        
+        Initiates a daemon thread that calls the 'min_max_alpha_beta' method with appropriate parameters.
+        A daemon thread is a background thread that will not block the main program from exiting; 
+        it is automatically terminated when the main thread (in this case, the GUI)
+        Once the move evaluation is complete, the provided callback function is executed to update the UI state
+        (e.g., to signal that the AI is no longer thinking)
+
+        Parameters:
+            white_is_playing (bool): True if the white player is to move; False otherwise.
+            callback (callable): A function to be called after the move evaluation is complete, used for UI state updates.
+
+        Returns:
+            bool: True if the background thread is successfully started.
+        """
+
         who_is_playing = "w" if white_is_playing else "b"
         def thinking_thread():
             try:
@@ -115,7 +170,7 @@ class AiClass:
                 print(f"Error with AI: {e}")
         
         self.thinking_thread = threading.Thread(target=thinking_thread)
-        self.thinking_thread.daemon = True  # thread will stop when program is stopped
+        self.thinking_thread.daemon = True  # thread will stop when main program is stopped
         self.thinking_thread.start()
         
         return True

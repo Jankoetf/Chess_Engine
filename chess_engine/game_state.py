@@ -2,6 +2,7 @@ from chess_engine.constants import *
 from chess_engine.move import Move
 
 class GameState():
+    #test boards
     board_test_1 = [
         ["bR",  "bN", "bB", "--", "bK", "--", "--", "--"],
         ["bP", "bP", "bP", "bP", "bP", "--", "--", "bP"],
@@ -34,12 +35,18 @@ class GameState():
         ["wP",  "wP", "--", "wR", "wP", "--", "wP", "wP"],
         ["--",  "--", "wB", "--", "--", "wB", "wN", "--"]
     ]
+
     def __init__(self, start_board = None):
-        #board is 8*8 2D list, each element of list has 2 characters
-        #firts character represents the color of piece
-        #second character represents type of piece
-        #"--" empty space with no piece
-        
+        """
+        board is 8*8 2D list, each element of list has 2 characters
+        firts character represents the color of piece
+        second character represents type of piece
+        "--" empty space with no piece
+
+        Args:
+            start_board: used for testing different positions, by default is None
+        """
+       
         self.board_default = [
             ["bR",  "bN", "bB", "bQ", "bK", "bB", "bN", "bR"],
             ["bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"],
@@ -90,18 +97,13 @@ class GameState():
         self.RightToCastleBlackLong = False
         self.RightToCastleBlackShort = False
         
-        self.ListOfStupidMoves = []
-        #['bP(1, 3)(3, 3)--Basic', 'wP(6, 1)(5, 1)--Basic', 'bN(0, 6)(2, 5)--Basic'],
+        self.ListOfStupidMoves = [] #this is an example: ['bP(1, 3)(3, 3)--Basic', 'wP(6, 1)(5, 1)--Basic', 'bN(0, 6)(2, 5)--Basic']
         
-        self.ListOfRealMoves = []
         self.black_is_in_check = False
         self.black_is_mated = False
         self.white_is_in_check = False
         self.white_is_mated = False
         self.stalmate = False
-        
-        #AI
-        self.DEPTH = 2
         
         
     def kings_position(self, board):
@@ -129,7 +131,22 @@ class GameState():
         
         
     #Control squares
-    def Control(self, color, board): #color maybe
+    def Control(self, color, board):
+        """
+        Computes the set of squares controlled (attacked) by all pieces of a given color on the board.
+
+        This method aggregates the squares that can potentially be attacked or reached by the pieces of the specified color.
+        It defines and uses local helper functions (e.g., Controled_by_pawn, Controled_by_knight) to calculate control
+        for individual piece types, such as pawns and knights. The resulting set represents all unique board coordinates
+        that are under control by the pieces of that color.
+
+        Args:
+            color (str): The color of the pieces to evaluate ('w' for white or 'b' for black).
+            board (list[list]): The current board state
+
+        Returns:
+            set: A set of tuples, where each tuple represents the coordinates (row, column) of a square controlled by the specified color
+        """
         All_Controled_Squares = set() #end square of moves - squares that pieces can attack - set
         
         def Controled_by_pawn(Col, Row, color):
@@ -247,12 +264,34 @@ class GameState():
                 if board[Col][Row][0] == color and board[Col][Row][1] == "K":
                     All_Controled_Squares.update(Controled_by_king(Col, Row, color))
         
-        #print(All_Controled_Squares)
+        #print(All_Controled_Squares) #debug
         return All_Controled_Squares
         
     def MakeStupidMove(self, move, board):
-        #self.Control("b")
-        #self.Check()
+        """
+        Executes a move on the board without verifying full move legality.
+
+        This method applies the given move (an instance of the Move class) to the board,
+        updating the game state in a "brute-force" manner. It handles special moves such as
+        en passant, castling, and pawn promotion by modifying both the board and various internal
+        state variables (e.g., king and rook first-move flags, king positions, and castling rights).
+        
+        Note that this move execution does not check for situations like leaving the king in check;
+        it simply updates the board and state, and records the move in the ListOfStupidMoves.
+
+        Parameters:
+            move: An instance of the Move class representing the move to be executed.
+            board (list): A 2D list representing the current state of the chess board.
+
+        Side Effects:
+            - Updates the board by moving the piece from the start square to the end square.
+            - Handles en passant by setting the en passant square and capturing the appropriate pawn.
+            - Processes castling by moving the rook accordingly when conditions are met.
+            - Updates first-move flags for kings and rooks, and updates king positions.
+            - Promotes a pawn to a queen if it reaches the back rank.
+            - Appends the move's signature to the ListOfStupidMoves.
+            - Toggles the side to move (whiteToMove).
+        """
         #An passan      
         if move.startSquarePiece[1] == 'P' and move.endSquarePiece == "--" and abs(move.endCol - move.startCol) == 2:
             self.AnPassanSquare = (move.endCol - (-1 if self.whiteToMove else 1), move.startRow)
@@ -330,11 +369,27 @@ class GameState():
         
         
     def undoStupidMove(self, board):
-    # ['bP(1, 2)(3, 2)--Basic', 'wP(6, 3)(4, 3)--Basic', 'bP(3, 2)(4, 3)wPBasic',
-    #  'wP(6, 2)(4, 2)--Basic', 'bP(4, 3)(5, 2)--ENPassan', 'wN(7, 1)(5, 0)--Basic',
-    #  'bP(5, 2)(6, 1)wPBasic', 'wN(5, 0)(4, 2)--Basic', 'bP(6, 1)(7, 2)wBPromotion',
-    #  'wN(7, 6)(5, 5)--Basic', 'bQ(7, 2)(7, 3)wQBasic', 'wN(4, 2)(2, 3)--Basic',
-    #  'bQ(7, 3)(2, 3)wNBasic', 'wK(7, 4)(7, 2)--LCastle']
+        """
+        Reverts the last executed move from the game state without full move legality checks.
+
+        This method undoes the most recent move recorded in ListOfStupidMoves by parsing its encoded string
+        and restoring the board to its previous state. It handles special cases including en passant,
+        long castling, short castling, and pawn promotions by reversing the changes made to the board.
+        Additionally, it updates internal state variables such as king positions, first-move flags for kings
+        and rooks, mating status, and toggles the active player (whiteToMove). Finally, it recalculates
+        the castling rights by calling the Rights_to_castle() method.
+
+        Args:
+            board (list): A 2D list representing the current state of the chess board
+
+        Example of coded moves:
+            ['bP(1, 2)(3, 2)--Basic', 'wP(6, 3)(4, 3)--Basic', 'bP(3, 2)(4, 3)wPBasic',
+            'wP(6, 2)(4, 2)--Basic', 'bP(4, 3)(5, 2)--ENPassan', 'wN(7, 1)(5, 0)--Basic',
+            'bP(5, 2)(6, 1)wPBasic', 'wN(5, 0)(4, 2)--Basic', 'bP(6, 1)(7, 2)wBPromotion',
+            'wN(7, 6)(5, 5)--Basic', 'bQ(7, 2)(7, 3)wQBasic', 'wN(4, 2)(2, 3)--Basic',
+            'bQ(7, 3)(2, 3)wNBasic', 'wK(7, 4)(7, 2)--LCastle']
+        """
+        
         if len(self.ListOfStupidMoves) != 0:
             MoveToUndo = self.ListOfStupidMoves.pop()
 
@@ -529,6 +584,24 @@ class GameState():
         return valid_king_moves        
         
     def getAllValidMoves(self, board):
+        """
+        Generates a list of Move instances representing all valid moves for the current player based on the board state. The moves generated follow
+        the standard movement rules for each chess piece but do not account for situations where the king remains in check after a move.
+
+        This method iterates through every square of the 8x8 board and, for the current player (determined by self.whiteToMove),
+        collects moves for each piece by invoking piece-specific helper methods (e.g., get_all_pawn_moves, get_all_knight_moves,
+        get_all_rook_moves, get_all_valid_bishop_moves, get_all_queen_moves, and get_all_king_moves). 
+        In other words, while the moves are valid with respect to basic chess movement rules, they do not verify whether a move
+        resolves a check condition.
+
+        Args:
+            board (list): A 2D list representing the current chess board state, where each element is a string indicating the piece
+                        ('wP' for white pawn, 'bK' for black king, '--' for an empty square ...)
+
+        Returns:
+            list: A list of Move class instances representing all basic valid moves available for the current player.
+                These moves may include invalid moves that do not escape from check.
+        """
         AllValidMoves = []
         for Col in range(8):
             for Row in range(8):
@@ -609,6 +682,24 @@ class GameState():
             
     
     def get_all_legit_moves(self):
+        """
+        Returns a list of legal moves (as Move instances) for the current player by filtering out moves
+        that would leave the king in check.
+
+        This method first generates all potential moves based on standard piece movement rules using
+        getAllValidMoves. It then iterates over the list of moves in reverse order, temporarily executing
+        each move with MakeStupidMove and toggling the active player. After the move is made, the method
+        calculates the opponent's controlled squares using the Control method. If the current player's king
+        is found in these controlled squares, the move is removed from the list. Special checks are performed
+        for castling moves to ensure that the intermediate squares are not attacked. After evaluating each move,
+        the move is undone using undoStupidMove and the active player is reverted.
+
+        Additionally, if no legal moves remain and the king is in check, the appropriate mating flag (black_is_mated
+        or white_is_mated) is set.
+
+        Returns:
+            list: A list of Move instances representing all legal moves that do not leave the king in check.
+        """
         moves = self.getAllValidMoves(self.board)
         #controled_squares = self.Control("b") if self.whiteToMove else self.Control("w")
         for i in range(len(moves) -1, -1, -1):

@@ -4,18 +4,20 @@ from chess_engine.constants import *
 class Label:
     def __init__(self, x, y, text=''):
         """
-        Inicijalizuje Label objekat.
+        Initializes a Label object
+
+        Args:
+            x (int): The x-coordinate of the label's top-left corner in grid units.
+            y (int): The y-coordinate of the label's top-left corner in grid units.
+            text (str, optional): The text to be displayed on the label. Defaults to an empty string.
         
-        :param x: X koordinata (gornji levi ugao)
-        :param y: Y koordinata (gornji levi ugao)
-        :param font: Font za prikazivanje teksta (pygame.font.Font objekat)
-        :param text: Tekst koji će biti prikazan
+        The coordinates are scaled by SQUARE_SIZE, for easier use.
         """
+
         self.x = x*SQUARE_SIZE
         self.y = y*SQUARE_SIZE
         self.font = pygame.font.SysFont("Palatino", 32)
-        # self.text = text
-        self.color = (139, 69, 19)  # Podrazumevana crna boja
+        self.color = (139, 69, 19)
 
         self.set_text(text)
     
@@ -36,5 +38,11 @@ class Label:
         self.y = y
         self.text_rect.topleft = (self.x, self.y)
     
-    def draw(self, surface):    
+    def draw(self, surface): 
+        """
+        Draws the label on the specified Pygame surface
+
+        Args:
+            surface (pygame.Surface): The surface on which the label will be rendered
+        """
         surface.blit(self.text_surface, self.text_rect)

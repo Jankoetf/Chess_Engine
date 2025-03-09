@@ -1,5 +1,14 @@
 class Move():   
     def __init__(self, startSq, endSq, board):
+        """
+        Creates a move with all informations about it like if it is a castle, a promotion, a en passan...
+
+        Args:
+            startSq: starting square of a move, tuple
+            ekdSq: ending square of a move, tuple
+            board: reference to game board
+        """
+
         #Start end squares
         self.startSq = startSq
         self.endSq = endSq
@@ -33,13 +42,19 @@ class Move():
         return (self.endCol == 7 or self.endCol == 0) and self.startSquarePiece[1] == "P"
     
     def get_Move_signature(self):
+        """
+        move types: Promotion, LCastle, SCastle, ENPassan, Basic
+
+        Returns: which type is move
+        """
         Special_char = "Promotion" if self.move_is_promotion else "LCastle" if self.is_move_long_castle() \
             else "SCastle" if self.is_move_short_castle() else "ENPassan" if self.move_is_en_passant else "Basic"
-        #return self.startSquarePiece + self.endSquarePiece + Special_char
+        
         return Special_char
         
         
     def __eq__(self, other):
+        """checking if two moves have the same starting and ending square"""
         if isinstance(other, Move):
             return self.startSq == other.startSq and self.endSq == other.endSq
     

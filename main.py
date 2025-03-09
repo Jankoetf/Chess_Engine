@@ -29,14 +29,14 @@ def main():
     clock = p.time.Clock()
 
     #game state class initialization
-    # gs = GameState(start_board = deepcopy(GameState.board_test_2)) #testing
+    # gs = GameState(start_board = deepcopy(GameState.board_test_2)) #for testing
     gs = GameState() #standard game...
 
     #AI class initialization
     ai_instance = AiClass(gs)
     
     gs.BlackOrWhiteMove()
-    validMoves = gs.get_all_legit_moves()
+    validMoves = gs.get_all_legit_moves() #get all legal moves for white, white is always playing first
     
     SquaresList = []
     SquareSelected = ()
@@ -45,11 +45,11 @@ def main():
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
-            elif e.type == p.MOUSEBUTTONDOWN and e.button == 1: #Left == 1, Right ==3             
+            elif e.type == p.MOUSEBUTTONDOWN and e.button == 1: #Left == 1, Right == 3             
                 location = p.mouse.get_pos()
                 print_detect_mouse(gs, location) #Checking square
-                # print(ui_instance)
-                help_square = detect_mouse_board_iterator(gs, location)
+                # print(ui_instance) #debug
+                help_square = detect_mouse_board_iterator(location)
 
                 if not ui_instance.show_menu:
                     view_instance.buttons["meni_icons_button"].handle_event(e)
@@ -64,7 +64,7 @@ def main():
                         for i in range(len(gs.ListOfStupidMoves)):
                             gs.undoStupidMove(gs.board)
                         
-                        if ui_instance.ai_white:
+                        if ui_instance.ai_white: # ai plays first
                             ui_instance.toggle_ai_thinking() #AI started thinking
                             ui_instance.temp_board = deepcopy(gs.board)
                             ai_instance.make_best_move_threaded(gs.whiteToMove, ui_instance.toggle_ai_thinking)
@@ -85,11 +85,10 @@ def main():
                         
                         gs.BlackOrWhiteMove()
                         
-                        #set state
+                        #change ui state, set game mode
                         view_instance.buttons["ai_white_button"].handle_event(e)
                         view_instance.buttons["human_vs_human_button"].handle_event(e)
                         view_instance.buttons["ai_black_button"].handle_event(e)
-
                         view_instance.labels["game_mode_label"].set_text("game mode: " + ui_instance.game_mode)
 
                         if view_instance.buttons["ai_white_button"].is_clicked(e.pos):
@@ -102,6 +101,7 @@ def main():
                                             
                 
                 if (SquareSelected != help_square) and not ((-1 in help_square) or (8 in help_square)) and not ui_instance.show_menu and not ui_instance.ai_thinking:
+                    #creating move from 2 mouse clicks
                     SquareSelected = help_square
                     SquaresList.append(SquareSelected)
                     print(help_square)
@@ -111,32 +111,30 @@ def main():
                     SquaresList = []
                 
                 if len(SquaresList) == 2:
-                    move = Move(SquaresList[0], SquaresList[1], gs.board)
+                    move = Move(SquaresList[0], SquaresList[1], gs.board) #new move is created, if it is legal it will be played
                     validMoves = gs.get_all_legit_moves()
                     
                     if move in validMoves:
                         gs.MakeStupidMove(move, gs.board)
                         ui_instance.game_evaluation = ai_instance.evaluate_board()
-                        print(f"White king position is: {gs.WhiteKingPosition}")
-                        print(f"Black king position is: {gs.BlackKingPosition}")
+                        # print(f"White king position is: {gs.WhiteKingPosition}")
+                        # print(f"Black king position is: {gs.BlackKingPosition}")
 
                         validMoves = gs.get_all_legit_moves() #check if game is ended
                         
                         if not ui_instance.human_vs_human:
-                            ui_instance.toggle_ai_thinking() #AI is not thinking
+                            ui_instance.toggle_ai_thinking() #AI started thinking
                             ui_instance.temp_board = deepcopy(gs.board)
                             ai_instance.make_best_move_threaded(gs.whiteToMove, ui_instance.toggle_ai_thinking)
 
                             validMoves = gs.get_all_legit_moves()
-                            # for i in range(len(validMoves)):
-                            #     print(validMoves[i])
                         
                         SquaresList = []
                         SquareSelected = ()
                         gs.BlackOrWhiteMove()
                     else:   
                         print("Move is invalid")
-                        SquaresList = []
+                        SquaresList = [] #we need to start creating move from beggining
                         SquareSelected = ()
             
             elif e.type == p.MOUSEBUTTONDOWN and e.button == 3:
@@ -147,8 +145,8 @@ def main():
                     gs.undoStupidMove(gs.board)
                     gs.BlackOrWhiteMove()
                     validMoves = gs.get_all_legit_moves()
-                    print(f"White king position is: {gs.WhiteKingPosition}")
-                    print(f"Black king position is: {gs.BlackKingPosition}")
+                    # print(f"White king position is: {gs.WhiteKingPosition}") #debug
+                    # print(f"Black king position is: {gs.BlackKingPosition}")
             
             elif ui_instance.show_manual:            
                 view_instance.manual.handle_event(e)
@@ -209,18 +207,17 @@ def main():
         p.display.flip()
 
     p.quit()
-    
-            
-def print_detect_mouse(gs, location):
+          
+def detect_mouse_board_iterator(location):
+    """convert mouse location to board square position"""
+    return (location[1]//64 - 1, location[0]//64 - 1)
+
+def print_detect_mouse(gs, location): #debug
     if location[1]//64 - 1 in range(8) and location[0]//64 - 1 in range(8):
         print(gs.board_notation[location[1]//64 - 1][location[0]//64 - 1])
 
-def detect_mouse(gs, location):
-    return gs.board_notation[location[1]//64 - 1][location[0]//64 - 1]
-
-def detect_mouse_board_iterator(gs, location):
-    return (location[1]//64 - 1, location[0]//64 - 1)
- 
+# def detect_mouse(gs, location):
+#     return gs.board_notation[location[1]//64 - 1][location[0]//64 - 1]
     
 if __name__ == "__main__":    
     main()

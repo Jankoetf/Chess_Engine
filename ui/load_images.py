@@ -4,6 +4,11 @@ import pygame as p
 
 class LoadImages:
     def __init__(self):
+        """
+        Initializes the LoadImages object by setting up the image filenames and size mappings,
+        and then loading the images for both chess pieces and menu elements
+
+        """
         self.pieces_names = [
             "bK", "bQ", "bN", "bR", "bP", "bB", "bK_w", "bK_l", "wP", "wR","wN", "wB", "wK", "wQ", "wK_w", "wK_l"
         ]

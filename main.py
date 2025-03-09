@@ -56,6 +56,9 @@ def main():
                     if view_instance.buttons["reset_button"].is_clicked(e.pos):
                         for i in range(len(gs.ListOfStupidMoves)):
                             gs.undoStupidMove(gs.board)
+                        
+                        if ui_instance.ai_white:
+                            print(gs.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "w"))
                 
                 if ui_instance.show_menu:
                     view_instance.buttons["background_style_button"].handle_event(e)

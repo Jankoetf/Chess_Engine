@@ -19,6 +19,7 @@ class UiState:
         self.ai_white = False
         self.human_vs_human = True
         self.ai_thinking = False
+        self.game_mode = "Human VS Human"
         
         # square selection
         self.square_selected = ()
@@ -57,16 +58,19 @@ class UiState:
         self.ai_white = True
         self.ai_black = False
         self.human_vs_human = False
+        self.game_mode = "White AI VS Human"
     
     def set_ai_black(self):
         self.ai_white = False
         self.ai_black = True
         self.human_vs_human = False
+        self.game_mode = "Black AI VS Human"
 
     def set_human_vs_human(self):
         self.ai_white = False
         self.ai_black = False
         self.human_vs_human = True
+        self.game_mode = "Human VS Human"
 
     def switch_background(self):
         self.board_style += 1

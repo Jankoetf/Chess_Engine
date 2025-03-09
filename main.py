@@ -84,10 +84,13 @@ def main():
                             gs.undoStupidMove(gs.board)
                         
                         gs.BlackOrWhiteMove()
+                        
                         #set state
                         view_instance.buttons["ai_white_button"].handle_event(e)
                         view_instance.buttons["human_vs_human_button"].handle_event(e)
                         view_instance.buttons["ai_black_button"].handle_event(e)
+
+                        view_instance.labels["game_mode_label"].set_text("game mode: " + ui_instance.game_mode)
 
                         if view_instance.buttons["ai_white_button"].is_clicked(e.pos):
                             ui_instance.toggle_ai_thinking() #AI started thinking
@@ -183,6 +186,8 @@ def main():
 
                 view_instance.labels["game_evaluation_label"].set_text(f"Position Evaluation: {ui_instance.game_evaluation:.4f}")
                 view_instance.labels["game_evaluation_label"].draw(screen)
+                view_instance.labels["game_mode_label"].draw(screen)
+                
 
         else:
             view_instance.draw_menu(menu, view_instance, ui_instance.board_style, ui_instance.show_manual)

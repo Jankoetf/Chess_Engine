@@ -32,7 +32,8 @@ class ViewClass:
 
         self.labels = {
             "game_evaluation_label":Label(0, 9, ""),
-            "ai_label": Label(0, 9.5, "AI is thinking")
+            "ai_label": Label(0, 9.5, "AI is thinking"),
+            "game_mode_label": Label(0, 0.5, "game mode: Human VS Human"),
         }
 
     @staticmethod

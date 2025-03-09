@@ -39,8 +39,6 @@ class GameState():
         #firts character represents the color of piece
         #second character represents type of piece
         #"--" empty space with no piece
-        self.mc = 0
-        self.uc = 0
         
         self.board_default = [
             ["bR",  "bN", "bB", "bQ", "bK", "bB", "bN", "bR"],
@@ -590,7 +588,7 @@ class GameState():
     def WhiteKingInCheck(self):
         control = self.Control("b", self.board)
         if self.WhiteKingPosition in control:
-            print("Beli je u sahu")
+            # print("Beli je u sahu")
             return True
         else: 
             return False
@@ -598,7 +596,7 @@ class GameState():
     def BlackKingInCheck(self):
         control = self.Control("w", self.board)
         if self.BlackKingPosition in control:
-            print("Crni je u sahu")
+            # print("Crni je u sahu")
             return True
         else: 
             return False
@@ -655,10 +653,10 @@ class GameState():
 
         if len(moves) == 0 and self.BlackKingInCheck():
                 self.black_is_mated = True
-                print("GAME STATE CLASS: black_is_mated")
+                # print("GAME STATE CLASS: black_is_mated")
         if len(moves) == 0 and self.WhiteKingInCheck():
                 self.white_is_mated = True
-                print("GAME STATE CLASS: white_is_mated")
+                # print("GAME STATE CLASS: white_is_mated")
             
         return moves
             

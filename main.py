@@ -29,7 +29,11 @@ def main():
     clock = p.time.Clock()
 
     #game state class initialization
-    gs = GameState(start_board = deepcopy(GameState.board_test_2))
+    # gs = GameState(start_board = deepcopy(GameState.board_test_2)) #testing
+    gs = GameState() #standard game...
+
+
+
 
     #AI class initialization
     ai_instance = AiClass(gs)
@@ -97,7 +101,7 @@ def main():
                         ui_instance.show_menu = False #play game!
                                             
                 
-                if (SquareSelected != help_square) and not ((-1 in help_square) or (8 in help_square)) and not ui_instance.show_menu:
+                if (SquareSelected != help_square) and not ((-1 in help_square) or (8 in help_square)) and not ui_instance.show_menu and not ui_instance.ai_thinking:
                     SquareSelected = help_square
                     SquaresList.append(SquareSelected)
                     print(help_square)
@@ -188,10 +192,9 @@ def main():
             view_instance.buttons["manual_button"].draw(screen)
 
         clock.tick(MAX_FPS)
+        print(ui_instance.ai_thinking)
         p.display.flip()
-    
-    print(gs.mc)
-    print(gs.uc)
+
     p.quit()
     
             

@@ -10,6 +10,7 @@ class AiClass:
             'wP': 1.0, 'wB': 3.3, 'wN': 3.0, 'wR': 5.0, 'wQ': 9.0, "--": 0, 'wK': 1000
         }
 
+        #control squares -> center is most important
         self.c_board = [
             [0.001, 0.002, 0.004, 0.008, 0.008, 0.004, 0.002, 0.001],
             [0.002, 0.004, 0.008, 0.016, 0.016, 0.008, 0.004, 0.002],
@@ -26,10 +27,13 @@ class AiClass:
 
     def evaluate_board(self):
         evaluation = 0
+
+        #classical piece evaluation, each piece is valuable
         for Col in range(8):
             for Row in range(8):
                 evaluation += self.pieces_values[self.game_state_instance.board[Col][Row]]
-                
+
+        #positional evaluation
         control_temp = self.game_state_instance.Control('b', self.game_state_instance.board)
         for con in control_temp:
             evaluation -= self.c_board[con[0]][con[1]]
@@ -37,6 +41,9 @@ class AiClass:
         control_temp = self.game_state_instance.Control('w', self.game_state_instance.board)
         for con in control_temp:
             evaluation += self.c_board[con[0]][con[1]]
+
+        # check, check mate
+        # if self.game_state_instance.
             
         return evaluation
 

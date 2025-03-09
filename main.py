@@ -29,7 +29,7 @@ def main():
     clock = p.time.Clock()
 
     #game state class initialization
-    gs = GameState(start_board = deepcopy(GameState.board_test))
+    gs = GameState(start_board = deepcopy(GameState.board_test_2))
 
     #AI class initialization
     ai_instance = AiClass(gs)

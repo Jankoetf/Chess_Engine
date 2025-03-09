@@ -2,7 +2,7 @@ from chess_engine.constants import *
 from chess_engine.move import Move
 
 class GameState():
-    board_test = [
+    board_test_1 = [
         ["bR",  "bN", "bB", "--", "bK", "--", "--", "--"],
         ["bP", "bP", "bP", "bP", "bP", "--", "--", "bP"],
         ["--", "--", "--", "--", "--", "--", "--", "--"],     
@@ -11,6 +11,28 @@ class GameState():
         ["--", "--", "--", "--", "--", "--", "--", "--"],
         ["wP",  "wP", "wP", "--", "wP", "wR", "wP", "wP"],
         ["--",  "wN", "wB", "wQ", "wK", "wB", "wN", "--"]
+    ]
+
+    board_test_2 = [
+        ["--",  "--", "--", "--", "bK", "--", "--", "--"],
+        ["bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"],
+        ["--", "--", "--", "--", "--", "--", "--", "--"],     
+        ["--", "--", "--", "--", "--", "--", "--", "--"],
+        ["--", "--", "--", "wQ", "bQ", "--", "--", "--"],
+        ["--", "--", "--", "--", "--", "--", "--", "--"],
+        ["wP",  "wP", "--", "wR", "wP", "--", "wP", "wP"],
+        ["--",  "wN", "wB", "--", "wK", "wB", "wN", "--"]
+    ]
+
+    board_test_2 = [
+        ["--",  "wK", "--", "--", "bK", "--", "--", "bR"],
+        ["bN", "bN", "bN", "bP", "bP", "bP", "bP", "bP"],
+        ["bB", "bB", "bB", "--", "--", "--", "--", "--"],     
+        ["--", "--", "--", "--", "--", "--", "--", "--"],
+        ["--", "--", "--", "wQ", "bQ", "--", "--", "--"],
+        ["--", "--", "--", "--", "--", "--", "--", "--"],
+        ["wP",  "wP", "--", "wR", "wP", "--", "wP", "wP"],
+        ["--",  "wN", "wB", "--", "--", "wB", "wN", "--"]
     ]
     def __init__(self, start_board = None):
         #board is 8*8 2D list, each element of list has 2 characters
@@ -482,15 +504,29 @@ class GameState():
                 if board[Col + d[0]][Row + d[1]] == "--" or board[Col + d[0]][Row + d[1]][0] == opponent_color:
                     valid_king_moves.append(Move((Col, Row),(Col + d[0], Row + d[1]), board))
          
-        #castle move
-        if color == "w" and self.RightToCastleWhiteLong and self.board[7][1:4] == ["--", "--", "--"]:
-            valid_king_moves.append(Move((Col, Row),(Col, Row - 2), board))
-        if color == "w" and self.RightToCastleWhiteShort and self.board[7][5:7] == ["--", "--"]:
-            valid_king_moves.append(Move((Col, Row),(Col, Row + 2), board))
-        if color == "b" and self.RightToCastleBlackLong and self.board[0][1:4] == ["--", "--", "--"]:
-            valid_king_moves.append(Move((Col, Row),(Col, Row - 2), board))
-        if color == "b" and self.RightToCastleBlackShort and self.board[0][5:7] == ["--", "--"]:
-            valid_king_moves.append(Move((Col, Row),(Col, Row + 2), board))
+        #castle moves
+        if Col == 7 and Row == 4 and color == "w":
+            if self.board[7][0] == "wR" and self.RightToCastleWhiteLong and self.board[7][1:4] == ["--", "--", "--"]:
+                valid_king_moves.append(Move((Col, Row),(Col, Row - 2), board))
+            if self.board[7][7] == "wR" and self.RightToCastleWhiteShort and self.board[7][5:7] == ["--", "--"]:
+                valid_king_moves.append(Move((Col, Row),(Col, Row + 2), board))
+
+        if Col == 0 and Row == 4 and color == "b":
+            if self.board[0][0] == "bR" and self.RightToCastleBlackLong and self.board[0][1:4] == ["--", "--", "--"]:
+                valid_king_moves.append(Move((Col, Row),(Col, Row - 2), board))
+            if self.board[0][7] == "bR" and self.RightToCastleBlackShort and self.board[0][5:7] == ["--", "--"]:
+                valid_king_moves.append(Move((Col, Row),(Col, Row + 2), board))
+
+
+        # if self.board[7][7] == "bR" and self.board[7][4] == "bK" and self.RightToCastleWhiteLong and self.board[7][1:4] == ["--", "--", "--"]:
+        #     valid_king_moves.append(Move((Col, Row),(Col, Row - 2), board))
+        # if color == "w" and self.RightToCastleWhiteShort and self.board[7][5:7] == ["--", "--"]:
+        #     valid_king_moves.append(Move((Col, Row),(Col, Row + 2), board))
+
+        # if color == "b" and self.RightToCastleBlackLong and self.board[0][1:4] == ["--", "--", "--"]:
+        #     valid_king_moves.append(Move((Col, Row),(Col, Row - 2), board))
+        # if color == "b" and self.RightToCastleBlackShort and self.board[0][5:7] == ["--", "--"]:
+        #     valid_king_moves.append(Move((Col, Row),(Col, Row + 2), board))
                     
         return valid_king_moves        
         

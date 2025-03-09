@@ -1,4 +1,5 @@
 import numpy as np
+import threading
 
 from chess_engine.constants import *
 
@@ -21,6 +22,7 @@ class AiClass:
         ]
 
         self.game_state_instance = game_state_instance
+        self.thinking_thread = None
 
     def evaluate_board(self):
         evaluation = 0
@@ -61,9 +63,9 @@ class AiClass:
                 if beta <= alpha:
                     break
                 
-            if depth == 0:
-                if len(ai_moves_val) != 0:
-                    self.game_state_instance.MakeStupidMove(moves[np.argmax(ai_moves_val)], board)
+            if depth == 0 and len(ai_moves_val) > 0:
+                self.game_state_instance.MakeStupidMove(moves[np.argmax(ai_moves_val)], board)
+                self.game_state_instance.get_all_legit_moves()
                 
             return bestVal
         
@@ -81,9 +83,29 @@ class AiClass:
                     ai_moves_val.append(bestVal)
                 if beta <= alpha:
                     break
-            if depth == 0:
-                self.game_state_instance.MakeStupidMove(moves[np.argmax(ai_moves_val)],board)                    
+            if depth == 0 and len(ai_moves_val) > 0:
+                self.game_state_instance.MakeStupidMove(moves[np.argmax(ai_moves_val)],board)
+                self.game_state_instance.get_all_legit_moves()
                     
             return bestVal
+        
+    def make_best_move_threaded(self, white_is_playing, callback):    
+        who_is_playing = "w" if white_is_playing else "b"
+        def thinking_thread():
+            try:
+                if who_is_playing == "w":
+                    self.min_max_alpha_beta(self.game_state_instance.board, 0, True, -1000, 1000, "w")
+                elif who_is_playing == "b":
+                    self.min_max_alpha_beta(self.game_state_instance.board, 0, True, -1000, 1000, "b")
+                
+                callback() #communication with ui state through callback, ai_thinking is set to True in main.py, here it will be set to False again
+            
+            except Exception as e:
+                print(f"Error with AI: {e}")
+        
+        self.thinking_thread = threading.Thread(target=thinking_thread)
+        self.thinking_thread.daemon = True  # thread will stop when program is stopped
+        self.thinking_thread.start()
+        
+        return True
 
-    

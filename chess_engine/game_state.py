@@ -2,8 +2,17 @@ from chess_engine.constants import *
 from chess_engine.move import Move
 
 class GameState():
-    
-    def __init__(self):
+    board_test = [
+        ["bR",  "bN", "bB", "--", "bK", "--", "--", "--"],
+        ["bP", "bP", "bP", "bP", "bP", "--", "--", "bP"],
+        ["--", "--", "--", "--", "--", "--", "--", "--"],     
+        ["--", "--", "--", "--", "--", "--", "--", "--"],
+        ["--", "--", "--", "--", "bQ", "wQ", "--", "--"],
+        ["--", "--", "--", "--", "--", "--", "--", "--"],
+        ["wP",  "wP", "wP", "--", "wP", "wR", "wP", "wP"],
+        ["--",  "wN", "wB", "wQ", "wK", "wB", "wN", "--"]
+    ]
+    def __init__(self, start_board = None):
         #board is 8*8 2D list, each element of list has 2 characters
         #firts character represents the color of piece
         #second character represents type of piece
@@ -11,15 +20,18 @@ class GameState():
         self.mc = 0
         self.uc = 0
         
-        self.board = [["bR",  "bN", "bB", "bQ", "bK", "bB", "bN", "bR"],
-                      ["bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"],
-                      ["--", "--", "--", "--", "--", "--", "--", "--"],     
-                      ["--", "--", "--", "--", "--", "--", "--", "--"],
-                      ["--", "--", "--", "--", "--", "--", "--", "--"],
-                      ["--", "--", "--", "--", "--", "--", "--", "--"],
-                      ["wP",  "wP", "wP", "wP", "wP", "wP", "wP", "wP"],
-                      ["wR",  "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]
+        self.board_default = [
+            ["bR",  "bN", "bB", "bQ", "bK", "bB", "bN", "bR"],
+            ["bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"],
+            ["--", "--", "--", "--", "--", "--", "--", "--"],     
+            ["--", "--", "--", "--", "--", "--", "--", "--"],
+            ["--", "--", "--", "--", "--", "--", "--", "--"],
+            ["--", "--", "--", "--", "--", "--", "--", "--"],
+            ["wP",  "wP", "wP", "wP", "wP", "wP", "wP", "wP"],
+            ["wR",  "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]
         ]
+
+        self.board = start_board if start_board != None else self.board_default
         
         self.board_notation = [["a8",  "b8", "c8", "d8", "e8", "f8", "g8", "h8"],
                               ["a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7"],
@@ -604,13 +616,13 @@ class GameState():
             
             self.undoStupidMove(self.board)
             self.whiteToMove = not self.whiteToMove
-        
-        if len(moves) == 0 and not self.whiteToMove and self.BlackKingInCheck():
+
+        if len(moves) == 0 and self.BlackKingInCheck():
                 self.black_is_mated = True
-                print("mate")
-        if len(moves) == 0 and self.whiteToMove and self.WhiteKingInCheck():
+                print("GAME STATE CLASS: black_is_mated")
+        if len(moves) == 0 and self.WhiteKingInCheck():
                 self.white_is_mated = True
-                print("mate")
+                print("GAME STATE CLASS: white_is_mated")
             
         return moves
             

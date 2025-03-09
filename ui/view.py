@@ -66,19 +66,20 @@ class ViewClass:
                 board.blit(img, (file*SQUARE_SIZE,rank*SQUARE_SIZE))
 
     @staticmethod
-    def draw_pieces(gs, board1):
+    def draw_pieces(gs, board, background):
+        
         for rank in range(BASE_DIMENSION):
             for file in range(BASE_DIMENSION):
-                piece = gs.board[rank][file]
+                piece = board[rank][file]
                 if piece != "--":
-                    board1.blit(ViewClass.Images[piece], p.Rect(file*SQUARE_SIZE,
+                    background.blit(ViewClass.Images[piece], p.Rect(file*SQUARE_SIZE,
                                 rank*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
         if gs.black_is_mated:
-            board1.blit(ViewClass.Images["wK_w"], p.Rect(gs.WhiteKingPosition[1]*SQUARE_SIZE, gs.WhiteKingPosition[0]*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
-            board1.blit(ViewClass.Images["bK_l"], p.Rect(gs.BlackKingPosition[1]*SQUARE_SIZE, gs.BlackKingPosition[0]*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+            background.blit(ViewClass.Images["wK_w"], p.Rect(gs.WhiteKingPosition[1]*SQUARE_SIZE, gs.WhiteKingPosition[0]*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+            background.blit(ViewClass.Images["bK_l"], p.Rect(gs.BlackKingPosition[1]*SQUARE_SIZE, gs.BlackKingPosition[0]*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
         elif gs.white_is_mated:
-            board1.blit(ViewClass.Images["wK_l"], p.Rect(gs.WhiteKingPosition[1]*SQUARE_SIZE, gs.WhiteKingPosition[0]*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
-            board1.blit(ViewClass.Images["bK_w"], p.Rect(gs.BlackKingPosition[1]*SQUARE_SIZE, gs.BlackKingPosition[0]*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+            background.blit(ViewClass.Images["wK_l"], p.Rect(gs.WhiteKingPosition[1]*SQUARE_SIZE, gs.WhiteKingPosition[0]*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+            background.blit(ViewClass.Images["bK_w"], p.Rect(gs.BlackKingPosition[1]*SQUARE_SIZE, gs.BlackKingPosition[0]*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
     
     @staticmethod
     def draw_menu_icons(board, sound, turn = "b"):

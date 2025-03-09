@@ -5,6 +5,7 @@ class UiState:
         self.show_menu = False #if menu than not table!
         self.show_menu_icons = False
         self.show_manual = False
+        self.temp_board = None
         
         # game options
         self.board_style, self.n_styles = 0, 3
@@ -88,6 +89,9 @@ class UiState:
     def stop_ai_thinking(self):
         """Označava da je AI završio razmišljanje."""
         self.ai_thinking = False
+
+    def toggle_ai_thinking(self):
+        self.ai_thinking = not self.ai_thinking
 
     def __str__(self):
         return f"ai_white:  {self.ai_white}, ai_black: {self.ai_black}, human: {self.human_vs_human}"

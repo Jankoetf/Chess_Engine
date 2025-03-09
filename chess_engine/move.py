@@ -42,3 +42,6 @@ class Move():
     def __eq__(self, other):
         if isinstance(other, Move):
             return self.startSq == other.startSq and self.endSq == other.endSq
+    
+    def __str__(self):
+        return f"({self.startSq}, {self.endSq}), ({self.startSquarePiece}, {self.endSquarePiece})\n"

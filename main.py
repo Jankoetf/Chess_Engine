@@ -1,11 +1,12 @@
 import pygame as p
+from copy import deepcopy
 
-import chess_engine.game_state as game_state
+from chess_engine.game_state import GameState
 from chess_engine.constants import *
 from chess_engine.ai_class import AiClass
+from chess_engine.move import Move
 from ui.ui_state import UiState
 from ui.view import ViewClass
-
 
 #initialize pygame
 p.init()
@@ -25,12 +26,12 @@ def main():
     skeleton_icons = p.Surface((WIDTH_TOTAL, HEIGHT_TOTAL)) 
     skeleton_icons.fill(p.Color("white"))
     menu = p.Surface((WIDTH_TOTAL, HEIGHT_TOTAL))
-    
     clock = p.time.Clock()
 
-    gs = game_state.GameState()
+    #game state class initialization
+    gs = GameState(start_board = deepcopy(GameState.board_test))
 
-    #AI
+    #AI class initialization
     ai_instance = AiClass(gs)
     
     gs.BlackOrWhiteMove()
@@ -63,7 +64,10 @@ def main():
                             gs.undoStupidMove(gs.board)
                         
                         if ui_instance.ai_white:
-                            print(ai_instance.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "w"))
+                            ui_instance.toggle_ai_thinking() #AI started thinking
+                            ui_instance.temp_board = deepcopy(gs.board)
+                            ai_instance.make_best_move_threaded(gs.whiteToMove, ui_instance.toggle_ai_thinking)
+                            validMoves = gs.get_all_legit_moves()
                 
                 if ui_instance.show_menu:
                     view_instance.buttons["background_style_button"].handle_event(e)
@@ -85,7 +89,10 @@ def main():
                         view_instance.buttons["ai_black_button"].handle_event(e)
 
                         if view_instance.buttons["ai_white_button"].is_clicked(e.pos):
-                            print(ai_instance.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "w"))
+                            ui_instance.toggle_ai_thinking() #AI started thinking
+                            ui_instance.temp_board = deepcopy(gs.board)
+                            ai_instance.make_best_move_threaded(gs.whiteToMove, ui_instance.toggle_ai_thinking)
+                            validMoves = gs.get_all_legit_moves()
 
                         ui_instance.show_menu = False #play game!
                                             
@@ -100,21 +107,24 @@ def main():
                     SquaresList = []
                 
                 if len(SquaresList) == 2:
-                    move = game_state.Move(SquaresList[0], SquaresList[1], gs.board)
+                    move = Move(SquaresList[0], SquaresList[1], gs.board)
                     validMoves = gs.get_all_legit_moves()
                     
                     if move in validMoves:
                         gs.MakeStupidMove(move, gs.board)
                         print(f"White king position is: {gs.WhiteKingPosition}")
                         print(f"Black king position is: {gs.BlackKingPosition}")
+
+                        validMoves = gs.get_all_legit_moves() #check if game is ended
                         
-                        if ui_instance.ai_white:
-                            print(ai_instance.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "w"))
-                        elif ui_instance.ai_black:
-                            print(ai_instance.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "b"))
-                        
-                        gs.Check()
-                        validMoves = gs.get_all_legit_moves()
+                        if not ui_instance.human_vs_human:
+                            ui_instance.toggle_ai_thinking() #AI is not thinking
+                            ui_instance.temp_board = deepcopy(gs.board)
+                            ai_instance.make_best_move_threaded(gs.whiteToMove, ui_instance.toggle_ai_thinking)
+                            
+                            validMoves = gs.get_all_legit_moves()
+                            for i in range(len(validMoves)):
+                                print(validMoves[i])
                         
                         SquaresList = []
                         SquareSelected = ()
@@ -142,7 +152,13 @@ def main():
         # display table and options 
         if not ui_instance.show_menu:
             ViewClass.draw_notation_rank_file(gs, background, ui_instance.show_control, ui_instance.table_color)
-            ViewClass.draw_pieces(gs, background)           
+
+            if not ui_instance.ai_thinking:
+                ViewClass.draw_pieces(gs, gs.board, background)           
+            else:
+                #there is one game_state_instance -> so there is one board, we don't want to show AI moving pieces all around while it is thinking
+                ViewClass.draw_pieces(gs, ui_instance.temp_board, background)
+
             if ui_instance.show_menu_icons:
                 ViewClass.draw_menu_icons(skeleton_icons, ui_instance.sound, "b" if not gs.whiteToMove else "w")
                 screen.blit(skeleton_icons, (0,0))
@@ -171,8 +187,6 @@ def main():
             view_instance.buttons["human_vs_human_button"].draw(screen)
             view_instance.buttons["manual_button"].draw(screen)
 
-                
-            
         clock.tick(MAX_FPS)
         p.display.flip()
     

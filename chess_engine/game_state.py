@@ -32,7 +32,7 @@ class GameState():
         ["--", "--", "--", "wQ", "bQ", "--", "--", "--"],
         ["--", "--", "--", "--", "--", "--", "--", "--"],
         ["wP",  "wP", "--", "wR", "wP", "--", "wP", "wP"],
-        ["--",  "wN", "wB", "--", "--", "wB", "wN", "--"]
+        ["--",  "--", "wB", "--", "--", "wB", "wN", "--"]
     ]
     def __init__(self, start_board = None):
         #board is 8*8 2D list, each element of list has 2 characters

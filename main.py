@@ -123,8 +123,8 @@ def main():
                             ai_instance.make_best_move_threaded(gs.whiteToMove, ui_instance.toggle_ai_thinking)
                             
                             validMoves = gs.get_all_legit_moves()
-                            for i in range(len(validMoves)):
-                                print(validMoves[i])
+                            # for i in range(len(validMoves)):
+                            #     print(validMoves[i])
                         
                         SquaresList = []
                         SquareSelected = ()

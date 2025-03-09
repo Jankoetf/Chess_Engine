@@ -42,9 +42,13 @@ class AiClass:
         for con in control_temp:
             evaluation += self.c_board[con[0]][con[1]]
 
-        # check, check mate
-        # if self.game_state_instance.
-            
+        # check
+        if self.game_state_instance.BlackKingInCheck():
+            evaluation += 1
+        elif self.game_state_instance.WhiteKingInCheck():
+            evaluation -= 1
+
+        
         return evaluation
 
     def min_max_alpha_beta(self, board, depth, isMaximizePlayer, alpha, beta, who_is_playing):
@@ -73,7 +77,7 @@ class AiClass:
             if depth == 0 and len(ai_moves_val) > 0:
                 self.game_state_instance.MakeStupidMove(moves[np.argmax(ai_moves_val)], board)
                 self.game_state_instance.get_all_legit_moves()
-                
+            
             return bestVal
         
         else:
@@ -93,7 +97,7 @@ class AiClass:
             if depth == 0 and len(ai_moves_val) > 0:
                 self.game_state_instance.MakeStupidMove(moves[np.argmax(ai_moves_val)],board)
                 self.game_state_instance.get_all_legit_moves()
-                    
+            
             return bestVal
         
     def make_best_move_threaded(self, white_is_playing, callback):    

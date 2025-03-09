@@ -30,28 +30,7 @@ class GameState():
                        [0.004, 0.008, 0.016, 0.032, 0.032, 0.016, 0.008, 0.004],
                        [0.002,  0.004, 0.008, 0.016, 0.016, 0.008, 0.004, 0.002],
                        [0.001,  0.002, 0.004, 0.008, 0.008, 0.004, 0.002, 0.001]
-        ]
-        
-        
-        self.help_board = [["bR",  "bN", "bB", "bQ", "bK", "bB", "--", "bR"],
-                          ["bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"],
-                          ["--", "--", "--", "bN", "--", "--", "--", "--"],     
-                          ["--", "bP", "--", "--", "--", "--", "--", "wP"],
-                          ["--", "--", "bN", "bP", "--", "--", "wP", "--"],
-                          ["--", "--", "--", "--", "--", "--", "--", "wR"],
-                          ["wP",  "wP", "wP", "wP", "wP", "--", "wP", "wP"],
-                          ["wR",  "wN", "--", "--", "wK", "wB", "wN", "--"]
-        ]             
-        
-        self.control_board = [["--", "--", "--", "--", "--", "--", "--", "--"],
-                              ["--", "--", "--", "--", "--", "--", "--", "--"],
-                              ["--", "--", "--", "--", "--", "--", "--", "--"],     
-                              ["--", "--", "--", "--", "--", "--", "--", "--"],
-                              ["--", "--", "--", "--", "--", "--", "--", "--"],
-                              ["--", "--", "--", "--", "--", "--", "--", "--"],
-                              ["--", "--", "--", "--", "--", "--", "--", "--"],
-                              ["--", "--", "--", "--", "--", "--", "--", "--"]
-        ]
+        ]          
         
         self.board_notation = [["a8",  "b8", "c8", "d8", "e8", "f8", "g8", "h8"],
                               ["a7", "b7", "c7", "d7", "e7", "f7", "g7", "h7"],
@@ -408,12 +387,6 @@ class GameState():
             
         self.Rights_to_castle()
         #print(self.ListOfStupidMoves)
-        
-        
-        
-    def MakeRealMove(self, move):
-        pass
-        
     
     def get_all_pawn_moves(self, color, Col, Row, board):
         valid_pawn_moves = []
@@ -595,10 +568,8 @@ class GameState():
     
     def Check(self):
         if self.whiteToMove:
-            #print("beli u sahu")
             return self.WhiteKingInCheck()
         else:
-            #print("crni u sahu")
             return self.BlackKingInCheck()
         
     
@@ -618,34 +589,6 @@ class GameState():
         for con in control_temp:
             evaluation += self.c_board[con[0]][con[1]]
             
-        #control_temp = self.Control('b', self.board)
-        # for con in control_temp:
-        #     score = 6 - m.floor(abs(con[0] - 3.5)) - m.floor(abs(con[1] - 3.5))
-        #     evaluation -= 0.001*(2**(score))
-            
-        # control_temp = self.Control('w', self.board)
-        # for con in control_temp:
-        #     score = 6 - m.floor(abs(con[0] - 3.5)) - m.floor(abs(con[1] - 3.5))
-        #     evaluation += 0.001*(2**(score))
-        
-        # control_temp = self.Control('b', self.board)
-        # for con in control_temp:
-        #     score = 6 - (abs(con[0] - 3.5))//1 - (abs(con[1] - 3.5))//1
-        #     evaluation -= 0.001*(2**(score))
-            
-        # control_temp = self.Control('w', self.board)
-        # for con in control_temp:
-        #     score = 6 - (abs(con[0] - 3.5))//1 - (abs(con[1] - 3.5))//1
-        #     evaluation += 0.001*(2**(score))
-            
-        #floor: a//1, ceil: -(-a // 1) !
-        # def ceil(n):
-        #     return int(-1 * n // 1 * -1)
-        
-        # def floor(n):
-        #     return int(n // 1)
-        
-            
         return evaluation
     
     def min_max_alpha_beta(self, board, depth, isMaximizePlayer, alpha, beta, who_is_playing):
@@ -660,7 +603,7 @@ class GameState():
         
         if isMaximizePlayer:
             bestVal = -1000
-            moves = self.get_all_legit_moves(board)
+            moves = self.get_all_legit_moves()
             # if depth == 0:
             #     num_of_first_moves = len(moves)
                 
@@ -685,7 +628,7 @@ class GameState():
         
         else:
             bestVal = 1000
-            moves = self.get_all_legit_moves(board)
+            moves = self.get_all_legit_moves()
             for move in moves:
                 self.MakeStupidMove(move, board)
                 self.mc +=1
@@ -704,10 +647,9 @@ class GameState():
             return bestVal
             
     
-    def get_all_legit_moves(self, board):
+    def get_all_legit_moves(self):
         moves = self.getAllValidMoves(self.board)
         #controled_squares = self.Control("b") if self.whiteToMove else self.Control("w")
-        #self.help_board = self.board
         for i in range(len(moves) -1, -1, -1):
             move_removed = False
             move = moves[i]
@@ -748,8 +690,6 @@ class GameState():
             self.undoStupidMove(self.board)
             self.whiteToMove = not self.whiteToMove
         
-        #for m in moves:
-            #print(m.startSquarePiece + str(m.startSq) + str(m.endSq) + m.endSquarePiece + move.get_Move_signature())
         if len(moves) == 0 and not self.whiteToMove and self.BlackKingInCheck():
                 self.black_is_mated = True
                 print("mate")

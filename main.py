@@ -29,7 +29,7 @@ def main():
     gs = game_state.GameState()
     
     gs.BlackOrWhiteMove()
-    validMoves = gs.get_all_legit_moves(gs.board)
+    validMoves = gs.get_all_legit_moves()
     
     SquaresList = []
     SquareSelected = ()
@@ -96,7 +96,7 @@ def main():
                 
                 if len(SquaresList) == 2:
                     move = game_state.Move(SquaresList[0], SquaresList[1], gs.board)
-                    validMoves = gs.get_all_legit_moves(gs.board)
+                    validMoves = gs.get_all_legit_moves()
                     
                     if move in validMoves:
                         gs.MakeStupidMove(move, gs.board)
@@ -109,7 +109,7 @@ def main():
                             print(gs.min_max_alpha_beta(gs.board, 0, True, -1000, 1000, "b"))
                         
                         gs.Check()
-                        validMoves = gs.get_all_legit_moves(gs.board)
+                        validMoves = gs.get_all_legit_moves()
                         
                         SquaresList = []
                         SquareSelected = ()
@@ -126,7 +126,7 @@ def main():
                     SquaresList = []
                     gs.undoStupidMove(gs.board)
                     gs.BlackOrWhiteMove()
-                    validMoves = gs.get_all_legit_moves(gs.board)
+                    validMoves = gs.get_all_legit_moves()
                     print(f"White king position is: {gs.WhiteKingPosition}")
                     print(f"Black king position is: {gs.BlackKingPosition}")
             

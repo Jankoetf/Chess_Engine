@@ -96,23 +96,23 @@ The application follows the Model-View-Controller (MVC) architectural pattern to
 - **gameplay**
 
 <img src="PresentationResources/PresentationPictures/initial.png" alt="Alt Text" width="256" height="256">
-<img src="PresentationResources/PresentationPictures/mate.PNG" alt="Alt Text" width="256" height="256">
+<img src="PresentationResources/PresentationPictures/mate.png" alt="Alt Text" width="256" height="256">
 
 - **style customization**
 
 <img src="PresentationResources/PresentationPictures/color.png" alt="Alt Text" width="256" height="256">
-<img src="PresentationResources/PresentationPictures/control.PNG" alt="Alt Text" width="256" height="256">
+<img src="PresentationResources/PresentationPictures/control.png" alt="Alt Text" width="256" height="256">
 
 - **menu**
 
 <img src="PresentationResources/PresentationPictures/menu.png" alt="Alt Text" width="256" height="256">
-<img src="PresentationResources/PresentationPictures/manual.PNG" alt="Alt Text" width="256" height="256">
+<img src="PresentationResources/PresentationPictures/manual.png" alt="Alt Text" width="256" height="256">
 
 ## Visual instructions - **how to play**
 
 <img src="Resources\ImgsMenu\manual_info.png" alt="Alt Text" width="320" height="480">
 
-## Video Presentation
+## Video Presentation (GIF)
 
 ![gameplay](PresentationResources\PresentationVideos\gif_presentation.gif)
 

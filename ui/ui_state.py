@@ -16,7 +16,7 @@ class UiState:
         
         #app state
         self.show_menu = False #if menu than not table!
-        self.show_menu_icons = False
+        self.show_menu_icons = True
         self.show_manual = False
         self.temp_board = None
         self.game_evaluation = 0
@@ -25,14 +25,14 @@ class UiState:
         self.board_style, self.n_styles = 0, 3
         self.table_color = False
         self.show_control = False
-        self.sound = False
+        self.sound = True
         
         # AI state
-        self.ai_black = False
+        self.ai_black = True
         self.ai_white = False
-        self.human_vs_human = True
+        self.human_vs_human = False
         self.ai_thinking = False
-        self.game_mode = "Human VS Human"
+        self.game_mode = "Black AI VS Human"
         
         # square selection
         self.square_selected = ()

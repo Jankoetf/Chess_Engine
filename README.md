@@ -35,27 +35,86 @@ A chess game built with Python and Pygame, offering both human vs. human gamepla
   - Ability to undo moves in human vs. human mode (Right Mouse Click)
   - The game instructions (how to play) with implemented scrolling functionality
 
+## Model-View-Controller (MVC) Pattern
+
+The application follows the Model-View-Controller (MVC) architectural pattern to separate concerns and maintain a clean, maintainable codebase:
+
+### Model (game/)
+
+- **game_state.py**: The core of the chess engine, implementing all chess rules, board representation, move validation, and game state tracking.
+- **move.py**: Represents chess moves with their properties, handling special moves like castling, en passant, and pawn promotion.
+- **ai_class.py**: Implements the minimax algorithm with alpha-beta pruning for efficient AI move calculation. Uses multithreading to prevent UI freezing during calculations.
+- **constants.py**: Contains game-related constants like board dimensions, and configuration settings
+
+### View (ui/)
+
+- **view.py**: Main rendering class responsible for visualizing the game board, pieces, and game state.
+- **buttons.py**: Each button on click calls callback that change main_state
+- **label.py**: Handles text rendering for game information, status messages
+- **manual_viewer.py**: Provides a scrollable interface for displaying game instructions
+- **load_images.py**: Utilities for loading and processing graphical assets.
+
+### Controller
+
+- **main.py**: The application entry point that coordinates between Model and View. Handles user input, manages game flow, and updates the display based on game state.
+- **ui_state.py**: Encapsulates the state of the controller, tracking UI-specific states like active menu, game mode, and display options
+
+### Supporting Files
+
+- **resources/**: Contains all graphical assets used by the application.
+- **RunScripts/**: Convenience batch scripts for launching the application.
+- **PresentationResources/**: Materials used for project presentations
+- **requirements.txt**: Lists all Python dependencies required by the project.
+- **.gitignore**: Specifies files and directories excluded from version control.
+- **README.md**: Project documentation including installation instructions, features, and usage guide.
+
 ## Project Structure
 
-- main.py
+**Chess_Engine/**<br>
+├── **chess_engine/** # Model - Chess logic and state management<br>
+│ ├── **game_state.py** # Core chess rules, board state and move validation<br>
+│ ├── move.py # Move representation<br>
+│ ├── **ai_class.py** # AI implementation with alpha-beta search<br>
+│ └── constants.py # Game-related constants and configurations<br>
+├── **user_interface/** # View - User interface components<br>
+│ ├── **view.py** - # Main visualization class<br>
+│ ├── buttons.py # Interactive UI elements<br>
+│ ├── label.py # Text rendering components<br>
+│ ├── load_images.py # Resource loading utilities<br>
+│ └── manual_viewer.py # Scrollable instructions viewer<br>
+├── **main.py** # Application entry point and controller<br>
+├── **main_state.py** # Encapsulates the state of the controller <br>
+├── Resources/ # Assets including images and sounds<br>
+├── RunScripts/ # Batch scripts for easy application launch<br>
+├── PresentationResources/ # Project presentation materials<br>
+├── .gitignore # Git ignore file<br>
+├── requirements.txt # Project dependencies<br>
+└── README.md # Project documentation<br>
 
-<img src="PresentationPictures/Start.PNG" alt="Alt Text" width="256" height="256"> <img src="Screens_6_11_23/Game.PNG" alt="Alt Text" width="256" height="256">
+## Presentation
 
-## Main APP features
+- **gameplay**
 
-1. Undoing a move on rigth click, reseting game
-2. Menu - player can choose between normal game or player vs ai, and color agains ai
-3. Showing controling squares in game
+<img src="PresentationResources/PresentationPictures/initial.png" alt="Alt Text" width="256" height="256">
+<img src="PresentationResources/PresentationPictures/mate.PNG" alt="Alt Text" width="256" height="256">
 
-<img src="Screens_6_11_23/ControlSquares.PNG" alt="Alt Text" width="256" height="256"><img src="Screens_6_11_23/Menu.PNG" alt="Alt Text" width="256" height="256">
+- **style customization**
 
-## Other features
+<img src="PresentationResources/PresentationPictures/color.png" alt="Alt Text" width="256" height="256">
+<img src="PresentationResources/PresentationPictures/control.PNG" alt="Alt Text" width="256" height="256">
 
-1. Meni icons - when player clicks outside of game board, menu icons show up
-2. Check mate animation
-3. Changing board stile and menu background picture
+- **menu**
 
-<img src="Screens_6_11_23/Mate.PNG" alt="Alt Text" width="256" height="256"><img src="Screens_6_11_23/matew.PNG" alt="Alt Text" width="256" height="256">
+<img src="PresentationResources/PresentationPictures/menu.png" alt="Alt Text" width="256" height="256">
+<img src="PresentationResources/PresentationPictures/manual.PNG" alt="Alt Text" width="256" height="256">
+
+## Visual instructions - **how to play**
+
+<img src="Resources\ImgsMenu\manual_info.png" alt="Alt Text" width="320" height="480">
+
+## Video Presentation
+
+![gameplay](PresentationResources\PresentationVideos\gif_presentation.gif)
 
 ## **Thank you for exploring my project!**
 

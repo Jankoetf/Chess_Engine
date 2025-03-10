@@ -32,13 +32,13 @@ class LoadImages:
     def load_piece_images(self):
         for piece in self.pieces_names:
             self.piece_images_map[piece] = p.transform.scale(
-                    p.image.load("Images/" + piece + ".png"),
+                    p.image.load("Resources/Images/" + piece + ".png"),
                     (SQUARE_SIZE, SQUARE_SIZE))
 
     def load_menu_images(self):
         for name, size_type in self.menu_images_size_map.items():
             self.meni_images_map[name] = p.transform.scale(
-                    p.image.load("ImgsMenu/" + name + size_type[2]),
+                    p.image.load("Resources/ImgsMenu/" + name + size_type[2]),
                     (size_type[0]*SQUARE_SIZE, size_type[1]*SQUARE_SIZE))
         
         

@@ -38,7 +38,7 @@ class ViewClass:
             "manual_button": Button(7, 9, 2, 1, self.Menu["manual"], None, ui_instance.toggle_manual),
         }
 
-        manual_path = "ImgsMenu\game_instructions.png"
+        manual_path = "Resources/ImgsMenu/game_instructions.png"
         self.manual = ManualViewer(manual_path, (WIDTH_TOTAL, HEIGHT))
 
         self.labels = {

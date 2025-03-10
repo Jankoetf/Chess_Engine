@@ -29,6 +29,7 @@ class ManualViewer:
             self.max_scroll = max(0, self.image_height - self.screen_height)
             
         except Exception as e:
+            print("ERROR: ", e)
             self.image = None
             self.image_width = self.image_height = 0
             self.max_scroll = 0
@@ -94,7 +95,8 @@ class ManualViewer:
                 view_rect = pygame.Rect(0, self.scroll_y, self.image_width, view_height)
                 visible_portion = self.image.subsurface(view_rect)
                 screen.blit(visible_portion, (x_pos, 0))
-            except ValueError:
+            except ValueError as e:
+                print("ERROR: ", e)
                 screen.blit(self.image, (x_pos, -self.scroll_y))
         
         # Draw the scrollbar if the image height exceeds the screen height

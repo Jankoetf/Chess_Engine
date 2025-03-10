@@ -21,7 +21,7 @@ A chess game built with Python and Pygame, offering both human vs. human gamepla
 - **Model-View-Controller Pattern**
   - Clear separation between game logic and presentation
   - Separate classes for game state, AI, UI components, and rendering
-  - UI state class encapsulates state of the controler (main.py)
+  - state class encapsulates state of the controler (main.py)
 - **User-Friendly Interface**
   - Multiple game modes:
     - Human vs. Human

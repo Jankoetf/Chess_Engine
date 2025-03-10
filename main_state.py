@@ -1,5 +1,5 @@
 """ class that encapsulates the user interface state of a chess application """
-class UiState:
+class MainState:
     def __init__(self):
         """
         Initializes the main application UI state and global configuration options.

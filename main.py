@@ -5,7 +5,7 @@ from chess_engine.game_state import GameState
 from chess_engine.constants import *
 from chess_engine.ai_class import AiClass
 from chess_engine.move import Move
-from ui_state import UiState
+from main_state import UiState
 from ui.view import ViewClass
 
 #initialize pygame

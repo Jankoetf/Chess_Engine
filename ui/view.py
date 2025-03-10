@@ -42,9 +42,9 @@ class ViewClass:
         self.manual = ManualViewer(manual_path, (WIDTH_TOTAL, HEIGHT))
 
         self.labels = {
-            "game_evaluation_label":Label(0, 9, ""),
-            "ai_label": Label(0, 9.5, "AI is thinking"),
-            "game_mode_label": Label(0, 0.5, "game mode: Human VS Human"),
+            "game_evaluation_label":Label(0.2, 9, ""),
+            "ai_label": Label(0.2, 9.5, "AI is thinking"),
+            "game_mode_label": Label(0.2, 0.5, "game mode: Black AI VS Human"),
         }
 
     @staticmethod

@@ -44,6 +44,14 @@ class AiClass:
         """
         evaluation = 0
 
+        #mate
+        if self.game_state_instance.black_is_mated:
+            evaluation = 1000
+            return evaluation
+        if self.game_state_instance.white_is_mated:
+            evaluation = -1000
+            return evaluation
+
         #classical piece evaluation, each piece is valuable
         for Col in range(8):
             for Row in range(8):
@@ -63,7 +71,6 @@ class AiClass:
             evaluation += 1
         elif self.game_state_instance.WhiteKingInCheck():
             evaluation -= 1
-
         
         return evaluation
 

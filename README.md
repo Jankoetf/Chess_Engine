@@ -111,7 +111,14 @@ The application follows the Model-View-Controller (MVC) architectural pattern to
 
 ## Video Presentation (GIF)
 
+<!--
 <img src="PresentationResources/PresentationVideos/gif_presentation.gif" alt="gameplay" width="400">
+-->
+
+<video width="400" autoplay loop muted>
+  <source src="PresentationResources/PresentationVideos/mp4_presentation.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 ## Getting Started (Installation)
 

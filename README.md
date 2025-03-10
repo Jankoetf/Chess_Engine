@@ -1,6 +1,6 @@
 # Chess_Engine
 
-**Artificial Inteligence, Objective oriented programming(Model-View-Controller Pattern), python, pygame, numpy, multithreading**
+**Artificial Inteligence, Objective oriented programming(Model-View-Controller Pattern), python, pygame, numpy, threading**
 
 ## Overview
 

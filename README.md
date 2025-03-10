@@ -117,7 +117,7 @@ The application follows the Model-View-Controller (MVC) architectural pattern to
 
 Step-by-step guide to set up your project locally:
 
-### Option 1
+### Option 1: Menual Setup
 
 - **step 1: clone the repositiry:**
   ```
@@ -131,14 +131,13 @@ Step-by-step guide to set up your project locally:
   ```
 
 - **step 2: go to root directory, install requirenments and run the game**
+  ```
+  cd Chess_Engine
+  pip install -r requirements.txt
+  python main.py
+  ```
 
-```
-cd Chess_Engine
-pip install -r requirements.txt
-python main.py
-```
-
-### Option 2
+### Option 2: Automated Setup
 
 - **step 1: clone the repositiry:**
 
@@ -147,10 +146,9 @@ python main.py
   ```
 
 - **step 2: run batch script, automated**
-
-```
-./RunScripts/first_run_automated.bat
-```
+  ```
+  ./RunScripts/first_run_automated.bat
+  ```
 
 ## **Thank you for exploring my project!**
 

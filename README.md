@@ -113,6 +113,45 @@ The application follows the Model-View-Controller (MVC) architectural pattern to
 
 <img src="PresentationResources/PresentationVideos/gif_presentation.gif" alt="gameplay" width="400">
 
+## Getting Started (Installation)
+
+Step-by-step guide to set up your project locally:
+
+### Option 1
+
+- **step 1: clone the repositiry:**
+  ```
+  git clone https://github.com/Jankoetf/Chess_Engine.git
+  ```
+- **optional step** - create virtual environment, windows
+
+  ```
+  python -m venv venv
+  venv\Scripts\activate
+  ```
+
+- **step 2: go to root directory, install requirenments and run the game**
+
+```
+cd Chess_Engine
+pip install -r requirements.txt
+python main.py
+```
+
+### Option 2
+
+- **step 1: clone the repositiry:**
+
+  ```
+  git clone https://github.com/Jankoetf/Chess_Engine.git
+  ```
+
+- **step 2: run batch script, automated**
+
+```
+./RunScripts/first_run_automated.bat
+```
+
 ## **Thank you for exploring my project!**
 
 If you'd like to learn more about my background and qualifications, please visit my [LinkedIn profile](https://www.linkedin.com/in/jankomitrovic)

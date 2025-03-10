@@ -70,8 +70,6 @@ The application follows the Model-View-Controller (MVC) architectural pattern to
 
 ## Project Structure
 
-[Statistics Course](https://github.com/Jankoetf/A-B-Testing/blob/main/Statistics_udemy_hindu.ipynb)
-
 **Chess_Engine/**<br>
 ├── [**chess_engine/**](./chess_engine/) # Model - Chess logic and state management<br>
 │ ├── [**game_state.py**](./chess_engine/game_state.py) # Core chess rules, board state and move validation<br>

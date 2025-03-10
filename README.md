@@ -147,7 +147,7 @@ Step-by-step guide to set up your project locally:
 
 - **step 2: run batch script, automated**
   ```
-  ./RunScripts/first_run_automated.bat
+  ./Chess_Engine/RunScripts/first_run_automated.bat
   ```
 
 ## **Thank you for exploring my project!**

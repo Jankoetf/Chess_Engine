@@ -139,14 +139,10 @@ Step-by-step guide to set up your project locally:
 
 ### Option 2: Automated Setup
 
-- **step 1: clone the repositiry:**
+- **step 1: clone the repositiry and run batch script**
 
   ```
   git clone https://github.com/Jankoetf/Chess_Engine.git
-  ```
-
-- **step 2: run batch script, automated**
-  ```
   ./Chess_Engine/RunScripts/first_run_automated.bat
   ```
 

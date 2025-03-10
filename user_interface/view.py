@@ -2,10 +2,10 @@
 import pygame as p
 
 from chess_engine.constants import *
-from ui.button import Button
-from ui.label import Label
-from ui.load_images import LoadImages
-from ui.manual_viewer import ManualViewer
+from user_interface.button import Button
+from user_interface.label import Label
+from user_interface.load_images import LoadImages
+from user_interface.manual_viewer import ManualViewer
 
 class ViewClass:
     Images, Menu = LoadImages().get_all_images()

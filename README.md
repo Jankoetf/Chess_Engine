@@ -57,16 +57,16 @@ The application follows the Model-View-Controller (MVC) architectural pattern to
 ### Controller
 
 - **main.py**: The application entry point that coordinates between Model and View. Handles user input, manages game flow, and updates the display based on game state.
-- **ui_state.py**: Encapsulates the state of the controller, tracking UI-specific states like active menu, game mode, and display options
+- **main_state.py**: Encapsulates the state of the controller, tracking UI-specific states like active menu, game mode, and display options
 
 ### Supporting Files
 
-- **resources/**: Contains all graphical assets used by the application.
+- **Resources/**: Contains all graphical assets used by the application.
 - **RunScripts/**: Convenience batch scripts for launching the application.
 - **PresentationResources/**: Materials used for project presentations
 - **requirements.txt**: Lists all Python dependencies required by the project.
 - **.gitignore**: Specifies files and directories excluded from version control.
-- **README.md**: Project documentation including installation instructions, features, and usage guide.
+- **README.md**: Project documentation including installation instructions, features, and usage guide
 
 ## Project Structure
 
@@ -75,22 +75,23 @@ The application follows the Model-View-Controller (MVC) architectural pattern to
 **Chess_Engine/**<br>
 ├── [**chess_engine/**](./chess_engine/) # Model - Chess logic and state management<br>
 │ ├── [**game_state.py**](./chess_engine/game_state.py) # Core chess rules, board state and move validation<br>
-│ ├── move.py # Move representation<br>
-│ ├── **ai_class.py** # AI implementation with alpha-beta search<br>
-│ └── constants.py # Game-related constants and configurations<br>
-├── **user_interface/** # View - User interface components<br>
-│ ├── **view.py** - # Main visualization class<br>
-│ ├── buttons.py # Interactive UI elements<br>
-│ ├── label.py # Text rendering components<br>
-│ ├── load_images.py # Resource loading utilities<br>
-│ └── manual_viewer.py # Scrollable instructions viewer<br>
-├── **main.py** # Application entry point and controller<br>
-├── **main_state.py** # Encapsulates the state of the controller <br>
+│ ├── [move.py](./chess_engine/move.py) # Move representation<br>
+│ ├── [**ai_class.py**](./chess_engine/ai_class.py) # AI implementation with alpha-beta search<br>
+│ └── [constants.py](./chess_engine/constants.py) # Game-related constants and configurations<br>
+├── [**user_interface/**](./user_interface/) # View - User interface components<br>
+│ ├── [**view.py**](./user_interface/view.py) - # Main visualization class<br>
+│ ├── [button.py](./user_interface/button.py) # Interactive UI elements<br>
+│ ├── [label.py](./user_interface/label.py) # Text rendering components<br>
+│ ├── [load_images.py](./user_interface/load_images.py) # Resource loading utilities<br>
+│ └── [manual_viewer.py](./user_interface/manual_viewer.py) # Scrollable instructions viewer<br>
+├── [**main.py**](./main.py) # Application entry point and controller<br>
+├── [**main_state.py**](./main_state.py) # Encapsulates the state of the controller <br>
 ├── Resources/ # Assets including images and sounds<br>
 ├── RunScripts/ # Batch scripts for easy application launch<br>
+│ ├── first_run_automated.bat - # batch run<br>
 ├── PresentationResources/ # Project presentation materials<br>
-├── .gitignore # Git ignore file<br>
-├── requirements.txt # Project dependencies<br>
+├── [.gitignore](./.gitignore) # Git ignore file<br>
+├── [requirements.txt](./requirements.txt) # Project dependencies<br>
 └── README.md # Project documentation<br>
 
 ## Presentation
